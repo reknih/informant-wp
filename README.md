@@ -1,4 +1,4 @@
-informant-droid
+informant-wp
 =============
 
 The Christan-Wirth-School schedule notifier app for Windows Phone.
