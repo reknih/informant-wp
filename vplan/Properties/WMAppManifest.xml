@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2014/deployment" AppPlatformVersion="8.1">
   <DefaultLanguage xmlns="" code="de-DE" />
   <App xmlns="" ProductID="{2c137d8b-d5d3-4d89-8445-535e7c3d4a32}" Title="CWS Informant" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="vplan author" Description="Sample description" Publisher="vplan" PublisherID="{1f789041-e0f7-4b23-b332-981dea7fd6da}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
@@ -19,17 +19,12 @@
           <Count>0</Count>
           <IconImageURI IsRelative="true" IsResource="false">Assets\Tiles\IconicTileMediumLarge.png</IconImageURI>
           <Title>CWS Informant</Title>
-          <Message>
-          </Message>
-          <BackgroundColor>
-          </BackgroundColor>
+          <Message></Message>
+          <BackgroundColor></BackgroundColor>
           <HasLarge>True</HasLarge>
-          <LargeContent1>
-          </LargeContent1>
-          <LargeContent2>
-          </LargeContent2>
-          <LargeContent3>
-          </LargeContent3>
+          <LargeContent1></LargeContent1>
+          <LargeContent2></LargeContent2>
+          <LargeContent3></LargeContent3>
           <DeviceLockImageURI IsRelative="true" IsResource="false">Assets\LockImage.png</DeviceLockImageURI>
         </TemplateIconic>
       </PrimaryToken>
