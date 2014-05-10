@@ -23,7 +23,7 @@
 
         <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="CWS MANAGER" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="CWS INFORMANT" Style="{StaticResource PhoneTextNormalStyle}"/>
             <TextBlock Text="Klasse/Kurs" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
@@ -45,8 +45,6 @@
                     <toolkit:ListPickerItem Content="Für den kommenden Tag"></toolkit:ListPickerItem>
                     <toolkit:ListPickerItem Content="Für alle beide!"></toolkit:ListPickerItem>
                 </toolkit:ListPicker>
-                <TextBlock Style="{StaticResource PhoneTextSubtleStyle}" Text="Darf man Benachichtigungen über Änderungen senden?" TextWrapping="Wrap"></TextBlock>
-                <toolkit:ToggleSwitch x:Name="notify" Click="notify_Click"></toolkit:ToggleSwitch>
                 <Button Content="Zu den Vertretungen" Click="Button_Click"/>
             </StackPanel>
         </Grid>

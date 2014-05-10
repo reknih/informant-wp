@@ -13,18 +13,22 @@ namespace vplan
         IsolatedStorageSettings settingsFile = IsolatedStorageSettings.ApplicationSettings;
         public bool write(string key, object data)
         {
-            if (settingsFile.Contains(key))
+            try
             {
-                settingsFile[key] = data;
-                settingsFile.Save();
-                return true;
+                if (settingsFile.Contains(key))
+                {
+                    settingsFile[key] = data;
+                    settingsFile.Save();
+                    return true;
+                }
+                else
+                {
+                    settingsFile.Add(key, data);
+                    settingsFile.Save();
+                    return true;
+                }
             }
-            else
-            {
-                settingsFile.Add(key, data);
-                settingsFile.Save();
-                return true;
-            }
+            catch { return false; }
         }
         public object read(string key)
         {

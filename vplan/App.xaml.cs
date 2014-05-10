@@ -113,7 +113,7 @@ namespace vplan
             {
                 if (exception.Message.Contains("BNS Error: The action is disabled"))
                 {
-                    MessageBox.Show("Background agents for this application have been disabled by the user.");
+                    MainPage.showBGDisabBox = true;
                 }
 
                 if (exception.Message.Contains("BNS Error: The maximum number of ScheduledActions of this type have already been added."))

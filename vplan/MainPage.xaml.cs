@@ -8,15 +8,17 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using UntisExp;
 
 namespace vplan
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private ObservableCollection<Data> Vertr = new ObservableCollection<Data>();
+        private ObservableCollection<UntisExp.Data> Vertr = new ObservableCollection<UntisExp.Data>();
         private Settings settings = new Settings();
         private Fetcher fetcher;
         private ProgressIndicator pi;
+        public static bool showBGDisabBox = false;
         // Konstruktor
         public MainPage()
         {
@@ -26,15 +28,15 @@ namespace vplan
             pi.IsIndeterminate = true;
             pi.Text = "Vertretungen werden geladen";
             SystemTray.SetProgressIndicator(this, pi);
-            fetcher = new Fetcher(this);
+            fetcher = new Fetcher(Clear, Alert, refresh, add);
             if (settings.read("oldDb") != null)
             {
-                Vertr = (ObservableCollection<Data>)settings.read("oldDb");
+                Vertr = (ObservableCollection<UntisExp.Data>)settings.read("oldDb");
             }
             else {
-                Vertr.Add(new Data());
+                Vertr.Add(new UntisExp.Data());
             }
-            fetcher = new Fetcher(this);
+            fetcher = new Fetcher(Clear, Alert, refresh, add);
 
             try
             {
@@ -48,12 +50,30 @@ namespace vplan
             DataContext = Vertr;
 
         }
+        public void Clear() {
+        }
+        public void Alert(string t, string msg, string btn) {
+            Dispatcher.BeginInvoke(() =>
+            {
+                MessageBox.Show(msg, t, MessageBoxButton.OK);
+            });
+        }
         // Daten für die ViewModel-Elemente laden
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (!App.ViewModel.IsDataLoaded)
             {
                 App.ViewModel.LoadData();
+            }
+            if (showBGDisabBox && !(settings.read("BGAgentDisabled") == null ? false : (bool)settings.read("BGAgentDisabled")))
+            {
+                MessageBox.Show("Der Hintergrundtask für diese App wurde vom Benutzer deaktiviert!");
+                showBGDisabBox = false;
+                settings.write("BGAgentDisabled", true);
+            }
+            else if (!showBGDisabBox && (settings.read("BGAgentDisabled") == null ? false : (bool)settings.read("BGAgentDisabled")))
+            {
+                settings.write("BGAgentDisabled", false);
             }
             if (settings.read("group") == null)
             {
@@ -62,19 +82,27 @@ namespace vplan
                 (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
             }
         }
-        public void refresh(ObservableCollection<Data> v1) {
-            Vertr = v1;
-            DataContext = Vertr;
-            settings.write("oldDb", Vertr);
-            try
+        public void refresh(List<UntisExp.Data> v1)
+        {
+
+            Vertr = new ObservableCollection<UntisExp.Data>(v1);
+            Dispatcher.BeginInvoke(() =>
             {
-                pi.IsVisible = false;
-                refreshBtn.Click += refreshBtn_Click;
-            }
-            catch { }
-        }
-        public void clear() {
-            Vertr.Clear();
+                DataContext = Vertr;
+                settings.write("oldDb", Vertr);
+                if (v1.Count == 0)
+                {
+                    var oc = new ObservableCollection<UntisExp.Data>();
+                    oc.Add(new UntisExp.Data());
+                    DataContext = oc;
+                }
+                try
+                {
+                    pi.IsVisible = false;
+                    refreshBtn.Click += refreshBtn_Click;
+                }
+                catch { }
+            });
         }
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
         {
@@ -87,10 +115,13 @@ namespace vplan
             }
             base.OnBackKeyPress(e);
         }
-        public void add(Data d) {
-            Vertr.Add(d);
-            pi.IsVisible = false;
-            settings.write("oldDb", Vertr);
+        public void add(UntisExp.Data d)
+        {
+            Dispatcher.BeginInvoke(() => {
+                Vertr.Add(d);
+                pi.IsVisible = false;
+                settings.write("oldDb", Vertr);
+            });
         }
 
         private void refreshBtn_Click(object sender, EventArgs e)

@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using UntisExp;
 
 namespace vplan
 {
@@ -25,7 +26,7 @@ namespace vplan
             pi.IsIndeterminate = true;
             pi.Text = "Vertretungen werden geladen";
             Fetcher fetcher;
-            fetcher = new Fetcher(this);
+            fetcher = new Fetcher(Alert, refresh);
             fetcher.getClasses();
             DataContext = Groups;
             // Datenkontext des Listenfeldsteuerelements auf die Beispieldaten festlegen
@@ -35,25 +36,23 @@ namespace vplan
         {
             try
             {
-                notify.IsChecked = (bool)settings.read("notify");
-            }
-            catch { }
-            try
-            {
                 notSelect.SelectedIndex = (int)settings.read("mode");
             }
             catch { }
         }
-        public void refresh(object grp)
+        public void refresh(List<Group> grp)
         {
-            Groups = (ObservableCollection<Group>)grp;
-            DataContext = Groups;
-            pi.IsVisible = false;
-            loaded = true;
-            if(settings.read("group") != null)
+            Groups = new ObservableCollection<Group>(grp);
+            Dispatcher.BeginInvoke(() =>
             {
-                classSelect.SelectedIndex = (int)settings.read("group");
-            }
+                DataContext = Groups;
+                pi.IsVisible = false;
+                loaded = true;
+                if (settings.read("group") != null)
+                {
+                    classSelect.SelectedIndex = (int)settings.read("group");
+                }
+            });
         }
 
         private void ListPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -75,11 +74,6 @@ namespace vplan
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
         }
 
-        private void notify_Click(object sender, RoutedEventArgs e)
-        {
-            settings.write("notify", notify.IsChecked);
-        }
-
         private void notSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -87,6 +81,13 @@ namespace vplan
                 settings.write("mode", notSelect.SelectedIndex);
             }
             catch { }
+        }
+        public void Alert(string t, string msg, string btn)
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                MessageBox.Show(msg, t, MessageBoxButton.OK);
+            });
         }
     }
 }
