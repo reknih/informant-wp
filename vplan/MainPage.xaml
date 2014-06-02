@@ -41,14 +41,14 @@
             <phone:Panorama.TitleTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock Margin="0,20,0,0" Text="{Binding}" FontFamily="/Assets/ChampagneLim-Bold.ttf#ChampagneLimousines"></TextBlock>
+                        <TextBlock Margin="0,30,0,0" Text="{Binding}" FontFamily="/Assets/ChampagneLim-Bold.ttf#ChampagneLimousines"></TextBlock>
                     </StackPanel>
                 </DataTemplate>
             </phone:Panorama.TitleTemplate>
 
-            <!--            <phone:Panorama.Background>
-                <ImageBrush ImageSource="/vplan;component/Assets/PanoramaBackground.png"/>
-            </phone:Panorama.Background> -->
+            <phone:Panorama.Background>
+                <ImageBrush ImageSource="/Assets/PanoBack.png"/>
+            </phone:Panorama.Background>
 
             <!--Panoramaelement eins-->
             <phone:PanoramaItem Header="Agenda">
@@ -87,8 +87,8 @@
                 <!--Einzeilige Liste mit Textumbruch-->
                     <StackPanel>
                     <TextBlock FontSize="{StaticResource PhoneFontSizeMedium}">Hallo,</TextBlock>
-                    <TextBlock Margin="0, 22, 0,0" FontSize="{StaticResource PhoneFontSizeNormal}" TextWrapping="Wrap">Diese App soll dir in der Schule helfen. Sie besser machen. Denn wir brauchen ja ein besseres Image. Angeblich. Deswegen bekommst du hier, vom Informanten, alles zuverlässig mitgeteilt. Und bald vielleicht auch pünktlich. Schreib uns, wenn wir sonst etwas verbessern können.</TextBlock>
-                    <TextBlock Margin="0, 10, 0,0" FontSize="{StaticResource PhoneFontSizeNormal}" TextWrapping="Wrap">Dein SR.</TextBlock>
+                    <TextBlock Margin="0, 22, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Diese App soll dir in der Schule helfen. Sie besser machen. Denn wir brauchen ja ein besseres Image. Angeblich. Deswegen bekommst du hier, vom Informanten, alles zuverlässig mitgeteilt. Und bald vielleicht auch pünktlich. Schreib uns, wenn wir sonst etwas verbessern können.</TextBlock>
+                    <TextBlock Margin="0, 10, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Dein SR.</TextBlock>
                 </StackPanel>
                 </phone:PanoramaItem>
 
