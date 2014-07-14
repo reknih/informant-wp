@@ -18,6 +18,8 @@ namespace vplan
         private Settings settings = new Settings();
         private Fetcher fetcher;
         private ProgressIndicator pi;
+        private Press press;
+        private List<News> news;
         public static bool showBGDisabBox = false;
         // Konstruktor
         public MainPage()
@@ -44,7 +46,7 @@ namespace vplan
                 refreshBtn.Click -= refreshBtn_Click;
             }
             catch { }
-
+            reachToPress();
             
             // Datenkontext des Listenfeldsteuerelements auf die Beispieldaten festlegen
             DataContext = Vertr;
@@ -139,6 +141,11 @@ namespace vplan
         {
             Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+        }
+        protected async void reachToPress() {
+            press = new Press();
+            await Press.getNews();
+            newspanel.DataContext = news;
         }
     }
 }
