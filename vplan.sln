@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vplan", "vplan\vplan.csproj", "{2C137D8B-D5D3-4D89-8445-535E7C3D4A32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataUpdate", "DataUpdate\DataUpdate.csproj", "{62FD9703-371A-4893-9DCD-4EDB84B09862}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UntisExport", "..\informant-core\informant-core\UntisExport.csproj", "{7E2DE76A-BF93-4B36-9223-D996F1C746CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UntisExport", "..\UntisExp\informant-core\UntisExport.csproj", "{7E2DE76A-BF93-4B36-9223-D996F1C746CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
