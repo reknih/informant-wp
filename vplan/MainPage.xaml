@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines"
     FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
+    Foreground="White"
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="False">
     
@@ -37,7 +37,7 @@
          -->
 
          <!--Panoramasteuerelement-->
-        <phone:Panorama Title="CWS Informant" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro">
+        <phone:Panorama Title="BETA CWS Informant" Foreground="White" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro">
             <phone:Panorama.TitleTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -65,8 +65,8 @@
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="0,-6,0,12">
-                                <TextBlock Text="{Binding Line1}" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
-                                <TextBlock Text="{Binding Line2}" FontFamily="/Assets/SourceSansPro-Light.ttf#Source Sans Pro" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                <TextBlock Text="{Binding Line1}" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" Foreground="White"/>
+                                <TextBlock Text="{Binding Line2}" FontFamily="/Assets/SourceSansPro-Light.ttf#Source Sans Pro" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}" Foreground="White"/>
                             </StackPanel>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
@@ -102,7 +102,7 @@
         </phone:Panorama>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar Opacity="0.6" IsVisible="True" IsMenuEnabled="False">
+        <shell:ApplicationBar Opacity="0.6" IsVisible="True" IsMenuEnabled="False" ForegroundColor="White" BackgroundColor="DarkSlateBlue">
             <shell:ApplicationBarIconButton IconUri="Assets/sync.png" Click="refreshBtn_Click" x:Name="refreshBtn" Text="Aktualisieren"></shell:ApplicationBarIconButton>
             <shell:ApplicationBarIconButton IconUri="Assets/settings.png" Click="setGroup_Click" x:Name="setGroup" Text="Klasse wählen"></shell:ApplicationBarIconButton>
         </shell:ApplicationBar>
