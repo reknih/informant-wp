@@ -7,11 +7,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines"
     FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
+    Foreground="White"
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="False">
+    
 
     <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -36,20 +37,36 @@
          -->
 
          <!--Panoramasteuerelement-->
-        <phone:Panorama Title="CWS Informant" FontFamily="/vplan;component/Assets/ChampagneLimousines.ttf">
-<!--            <phone:Panorama.Background>
-                <ImageBrush ImageSource="/vplan;component/Assets/PanoramaBackground.png"/>
-            </phone:Panorama.Background> -->
+        <phone:Panorama Title="BETA CWS Informant" Foreground="White" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro">
+            <phone:Panorama.TitleTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Margin="0,30,0,0" Text="{Binding}" FontFamily="/Assets/ChampagneLim-Bold.ttf#ChampagneLimousines"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </phone:Panorama.TitleTemplate>
+
+            <phone:Panorama.Background>
+                <ImageBrush ImageSource="/Assets/PanoBack.png"/>
+            </phone:Panorama.Background>
 
             <!--Panoramaelement eins-->
             <phone:PanoramaItem Header="Agenda">
+                <phone:PanoramaItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </phone:PanoramaItem.HeaderTemplate>
+
                 <!--Einzeilige Liste mit Textumbruch-->
                 <phone:LongListSelector Margin="0,0,-22,30" ItemsSource="{Binding}">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="0,-6,0,12">
-                                <TextBlock Text="{Binding Line1}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
-                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                <TextBlock Text="{Binding Line1}" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" Foreground="White"/>
+                                <TextBlock Text="{Binding Line2}" FontFamily="/Assets/SourceSansPro-Light.ttf#Source Sans Pro" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}" Foreground="White"/>
                             </StackPanel>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
@@ -58,12 +75,20 @@
 
             <!--Panoramaelement zwei-->
                 <!--Zweizeilige Liste mit Bildplatzhalter und Textumbruch unter Verwendung eines unverankerten Headers, der beim Bildlauf mitsamt Inhalt bewegt wird-->
-                <phone:PanoramaItem Header="Über die App">
-                    <!--Einzeilige Liste mit Textumbruch-->
+            <phone:PanoramaItem Header="Über die App">
+                <phone:PanoramaItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </phone:PanoramaItem.HeaderTemplate>
+
+                <!--Einzeilige Liste mit Textumbruch-->
                     <StackPanel>
                     <TextBlock FontSize="{StaticResource PhoneFontSizeMedium}">Hallo,</TextBlock>
-                    <TextBlock Margin="0, 22, 0,0" FontSize="{StaticResource PhoneFontSizeNormal}" TextWrapping="Wrap">Diese App soll dir in der Schule helfen. Sie besser machen. Denn wir brauchen ja ein besseres Image. Angeblich. Deswegen bekommst du hier, vom Informanten, alles zuverlässig mitgeteilt. Und bald vielleicht auch pünktlich. Schreib uns, wenn wir sonst etwas verbessern können.</TextBlock>
-                    <TextBlock Margin="0, 10, 0,0" FontSize="{StaticResource PhoneFontSizeNormal}" TextWrapping="Wrap">Dein SR.</TextBlock>
+                    <TextBlock Margin="0, 22, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Diese App soll dir in der Schule helfen. Sie besser machen. Denn wir brauchen ja ein besseres Image. Angeblich. Deswegen bekommst du hier, vom Informanten, alles zuverlässig mitgeteilt. Und bald vielleicht auch pünktlich. Schreib uns, wenn wir sonst etwas verbessern können.</TextBlock>
+                    <TextBlock Margin="0, 10, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Dein SR.</TextBlock>
                 </StackPanel>
                 </phone:PanoramaItem>
             <phone:PanoramaItem>
@@ -106,7 +131,7 @@
         </phone:Panorama>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar Opacity="0.6" IsVisible="True" IsMenuEnabled="False">
+        <shell:ApplicationBar Opacity="0.6" IsVisible="True" IsMenuEnabled="False" ForegroundColor="White" BackgroundColor="DarkSlateBlue">
             <shell:ApplicationBarIconButton IconUri="Assets/sync.png" Click="refreshBtn_Click" x:Name="refreshBtn" Text="Aktualisieren"></shell:ApplicationBarIconButton>
             <shell:ApplicationBarIconButton IconUri="Assets/settings.png" Click="setGroup_Click" x:Name="setGroup" Text="Klasse wählen"></shell:ApplicationBarIconButton>
         </shell:ApplicationBar>

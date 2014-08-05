@@ -42,7 +42,7 @@ namespace vplan
 
             try
             {
-                fetcher.getTimes((int)settings.read("group") + 1, false);
+                fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule, 30);
                 refreshBtn.Click -= refreshBtn_Click;
             }
             catch { }
@@ -134,7 +134,7 @@ namespace vplan
                 refreshBtn.Click -= refreshBtn_Click;
             }
             catch { }
-            fetcher.getTimes((int)settings.read("group") + 1, false);
+            fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule, 30);
         }
 
         private void setGroup_Click(object sender, EventArgs e)
