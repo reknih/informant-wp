@@ -11,7 +11,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="White"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="False">
+    shell:SystemTray.IsVisible="True">
     
 
     <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
@@ -91,8 +91,30 @@
                     <TextBlock Margin="0, 10, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Dein SR.</TextBlock>
                 </StackPanel>
                 </phone:PanoramaItem>
-
-                <!--Auskommentieren, um ein Ausrichtungsraster anzuzeigen und sicherzustellen, dass Ihre Steuerelemente
+            <phone:PanoramaItem Header="News">
+                <phone:PanoramaItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </phone:PanoramaItem.HeaderTemplate>
+                <!--Zweizeilige Liste mit Bildplatzhalter und Textumbruch unter Verwendung eines unverankerten Headers, der beim Bildlauf mitsamt Inhalt bewegt wird-->
+                <phone:LongListSelector Margin="0,0,-22,30" x:Name="newspanel" ItemsSource="{Binding}" SelectionChanged="newspanel_SelectionChanged">
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Width="432">
+                                <Image Width="100" Height="100" Source="{Binding Image}"/>
+                                <StackPanel Width="311" Margin="8,-7,0,0">
+                                    <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" Margin="10,0" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" Foreground="White"/>
+                                    <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" Margin="10,-2,10,0" FontFamily="/Assets/SourceSansPro-Light.ttf#Source Sans Pro" Style="{StaticResource PhoneTextSubtleStyle}" Foreground="White" />
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </phone:PanoramaItem>
+            <!--Auskommentieren, um ein Ausrichtungsraster anzuzeigen und sicherzustellen, dass Ihre Steuerelemente
             an den allgemeinen Grenzen ausgerichtet sind.  Das Bild hat oben einen Rand von -32 px wegen
             der Taskleiste. Legen Sie dies auf 0 fest (oder entfernen Sie den Rand komplett),
             wenn die Taskleiste ausgeblendet wird.

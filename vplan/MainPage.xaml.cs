@@ -3,11 +3,13 @@ using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using System.Windows.Media;
 using UntisExp;
 
 namespace vplan
@@ -18,6 +20,8 @@ namespace vplan
         private Settings settings = new Settings();
         private Fetcher fetcher;
         private ProgressIndicator pi;
+        private Press press;
+        private ObservableCollection<News> news;
         public static bool showBGDisabBox = false;
         // Konstruktor
         public MainPage()
@@ -26,9 +30,12 @@ namespace vplan
             pi = new ProgressIndicator();
             pi.IsVisible = true;
             pi.IsIndeterminate = true;
-            pi.Text = "Vertretungen werden geladen";
+            pi.Text = "Vertretungen werden aktualisiert";
             SystemTray.SetProgressIndicator(this, pi);
+            SystemTray.SetBackgroundColor(this, Color.FromArgb(225, 0, 31, 63));
+            SystemTray.SetForegroundColor(this, Color.FromArgb(225, 221, 221, 221));
             fetcher = new Fetcher(Clear, Alert, refresh, add);
+
             if (settings.read("oldDb") != null)
             {
                 Vertr = (ObservableCollection<UntisExp.Data>)settings.read("oldDb");
@@ -36,15 +43,6 @@ namespace vplan
             else {
                 Vertr.Add(new UntisExp.Data());
             }
-            fetcher = new Fetcher(Clear, Alert, refresh, add);
-
-            try
-            {
-                fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule, 30);
-                refreshBtn.Click -= refreshBtn_Click;
-            }
-            catch { }
-
             
             // Datenkontext des Listenfeldsteuerelements auf die Beispieldaten festlegen
             DataContext = Vertr;
@@ -61,6 +59,8 @@ namespace vplan
         // Daten für die ViewModel-Elemente laden
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            //fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule, 30);
+
             if (!App.ViewModel.IsDataLoaded)
             {
                 App.ViewModel.LoadData();
@@ -81,6 +81,13 @@ namespace vplan
                 Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);
                 (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
             }
+            else {
+                fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule, 30);
+            }
+            pi.Text = "Vertretungen werden aktualisiert";
+            pi.IsVisible = true;
+            SystemTray.SetProgressIndicator(this, pi);
+
         }
         public void refresh(List<UntisExp.Data> v1)
         {
@@ -98,10 +105,11 @@ namespace vplan
                 }
                 try
                 {
-                    pi.IsVisible = false;
+                    pi.Text = "Nachrichten werden abgefragt";
                     refreshBtn.Click += refreshBtn_Click;
                 }
                 catch { }
+                reachToPress();
             });
         }
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
@@ -138,6 +146,63 @@ namespace vplan
         private void setGroup_Click(object sender, EventArgs e)
         {
             Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);
+            (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+        }
+        protected void reachToPress() {
+            press = new Press();
+            try
+            {
+                new Fetcher(addNewsEntry, (int)settings.read("group") + 1, 30);
+            }
+            catch {
+                new Fetcher(addNewsEntry, 5, 30);
+            }
+            news = new ObservableCollection<News>();
+            press.getCalledBackForNews(addNewsEntrys);
+            newspanel.DataContext = news;
+        }
+        protected void addNewsEntry(News n)
+        {
+            Dispatcher.BeginInvoke(delegate
+            {
+                if (!news.Contains(n))
+                {
+                    news.Insert(0, n);
+                    newspanel.DataContext = news;
+                    newspanel.ScrollTo(news[0]);
+                }
+            });
+        }
+        protected void addNewsEntrys(List<News> n)
+        {
+            Dispatcher.BeginInvoke(delegate
+            {
+                foreach (var item in n)
+                {
+                    news.Add(item);
+                }
+                newspanel.DataContext = news;
+                pi.Text = Helpers.getRandomArrayItem(VConfig.successJokes);
+                PutDelay();
+            });
+        }
+        protected async Task PutDelay() {
+            try
+            {
+                await Task.Delay(1500);
+            }
+            catch { }
+            Dispatcher.BeginInvoke(() =>
+            {
+                pi.IsVisible = false;
+            });
+        }
+
+        private void newspanel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = ((LongListSelector)sender).SelectedItem as News;
+            settings.write("selectedNews", item);
+            Uri uri = new Uri("/NewsItemViewer.xaml", UriKind.Relative);
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
         }
     }
