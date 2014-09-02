@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Tasks;
 using Microsoft.Phone.Shell;
 using UntisExp;
 
@@ -32,5 +33,11 @@ namespace vplan
             }
         }
 
+        private void webBtn_Click(object sender, EventArgs e)
+        {
+            var wbt = new WebBrowserTask();
+            wbt.Uri = theNews.Source;
+            wbt.Show();
+        }
     }
 }

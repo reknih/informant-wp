@@ -31,7 +31,7 @@
                 <Image Grid.Column="0" Width="100" Height="100" Stretch="UniformToFill" Source="{Binding Image}"></Image>
                 <StackPanel Grid.Column="1">
                     <TextBlock Foreground="Black" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines" Text="{Binding SourcePrint}" Style="{StaticResource PhoneTextNormalStyle}"/>
-                    <TextBlock Foreground="Black" FontFamily="/Assets/ChampagneLim-Bold.ttf#ChampagneLimousines" Text="{Binding Title}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" TextWrapping="Wrap"/>
+                    <TextBlock Foreground="Black" FontFamily="/Assets/ChampagneLim-Bold.ttf#ChampagneLimousines" Text="{Binding Title}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" TextWrapping="NoWrap"/>
                 </StackPanel>
             </Grid>
 
@@ -42,5 +42,9 @@
             </ScrollViewer>
         </Grid>
     </Grid>
-
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Opacity="0.6" IsVisible="True" IsMenuEnabled="False" ForegroundColor="White" BackgroundColor="Gray">
+            <shell:ApplicationBarIconButton Click="webBtn_Click" IconUri="Assets/feature.search.png" x:Name="webBtn" Text="Im Web"></shell:ApplicationBarIconButton>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>
