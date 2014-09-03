@@ -53,13 +53,18 @@ namespace vplan
         public void Alert(string t, string msg, string btn) {
             Dispatcher.BeginInvoke(() =>
             {
+                if (t == VConfig.noPageErrTtl)
+                {
+                    pi.Text = "Nachrichten werden abgefragt";
+                    reachToPress();
+                }
                 MessageBox.Show(msg, t, MessageBoxButton.OK);
             });
         }
         // Daten für die ViewModel-Elemente laden
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule, 30);
+            //fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule);
 
             if (!App.ViewModel.IsDataLoaded)
             {
@@ -82,7 +87,7 @@ namespace vplan
                 (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
             }
             else {
-                fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule, 30);
+                fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule);
             }
             pi.Text = "Vertretungen werden aktualisiert";
             pi.IsVisible = true;
@@ -140,7 +145,7 @@ namespace vplan
                 refreshBtn.Click -= refreshBtn_Click;
             }
             catch { }
-            fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule, 30);
+            fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule);
         }
 
         private void setGroup_Click(object sender, EventArgs e)
@@ -152,10 +157,10 @@ namespace vplan
             press = new Press();
             try
             {
-                new Fetcher(addNewsEntry, (int)settings.read("group") + 1, 30);
+                new Fetcher(addNewsEntry, (int)settings.read("group") + 1);
             }
             catch {
-                new Fetcher(addNewsEntry, 5, 30);
+                new Fetcher(addNewsEntry, 5);
             }
             news = new ObservableCollection<News>();
             press.getCalledBackForNews(addNewsEntrys);

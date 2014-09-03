@@ -144,6 +144,7 @@
     <Content Include="Assets\ChampagneLim.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\feature.search.png" />
     <Content Include="Assets\PanoBack.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
