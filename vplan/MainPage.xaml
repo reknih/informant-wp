@@ -37,7 +37,7 @@
          -->
 
          <!--Panoramasteuerelement-->
-        <phone:Panorama Title="BETA CWS Informant" Foreground="White" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro">
+        <phone:Panorama Title="CWS Informant" Foreground="White" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro">
             <phone:Panorama.TitleTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -75,22 +75,6 @@
 
             <!--Panoramaelement zwei-->
                 <!--Zweizeilige Liste mit Bildplatzhalter und Textumbruch unter Verwendung eines unverankerten Headers, der beim Bildlauf mitsamt Inhalt bewegt wird-->
-            <phone:PanoramaItem Header="Über die App">
-                <phone:PanoramaItem.HeaderTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines"></TextBlock>
-                        </StackPanel>
-                    </DataTemplate>
-                </phone:PanoramaItem.HeaderTemplate>
-
-                <!--Einzeilige Liste mit Textumbruch-->
-                    <StackPanel>
-                    <TextBlock FontSize="{StaticResource PhoneFontSizeMedium}">Hallo,</TextBlock>
-                    <TextBlock Margin="0, 22, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Diese App soll dir in der Schule helfen. Sie besser machen. Denn wir brauchen ja ein besseres Image. Angeblich. Deswegen bekommst du hier, vom Informanten, alles zuverlässig mitgeteilt. Und bald vielleicht auch pünktlich. Schreib uns, wenn wir sonst etwas verbessern können.</TextBlock>
-                    <TextBlock Margin="0, 10, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Dein SR.</TextBlock>
-                </StackPanel>
-                </phone:PanoramaItem>
             <phone:PanoramaItem Header="News">
                 <phone:PanoramaItem.HeaderTemplate>
                     <DataTemplate>
@@ -114,6 +98,23 @@
                     </phone:LongListSelector.ItemTemplate>
                 </phone:LongListSelector>
             </phone:PanoramaItem>
+            <phone:PanoramaItem Header="Über die App">
+                <phone:PanoramaItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </phone:PanoramaItem.HeaderTemplate>
+
+                <!--Einzeilige Liste mit Textumbruch-->
+                <StackPanel>
+                    <TextBlock FontSize="{StaticResource PhoneFontSizeMedium}">Hallo,</TextBlock>
+                    <TextBlock Margin="0, 22, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Diese App soll dir in der Schule helfen. Sie besser machen. Denn wir brauchen ja ein besseres Image. Angeblich. Deswegen bekommst du hier, vom Informanten, alles zuverlässig mitgeteilt. Und bald vielleicht auch pünktlich. Schreib uns, wenn wir sonst etwas verbessern können.</TextBlock>
+                    <TextBlock Margin="0, 10, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Dein SR.</TextBlock>
+                </StackPanel>
+            </phone:PanoramaItem>
+
             <!--Auskommentieren, um ein Ausrichtungsraster anzuzeigen und sicherzustellen, dass Ihre Steuerelemente
             an den allgemeinen Grenzen ausgerichtet sind.  Das Bild hat oben einen Rand von -32 px wegen
             der Taskleiste. Legen Sie dies auf 0 fest (oder entfernen Sie den Rand komplett),
