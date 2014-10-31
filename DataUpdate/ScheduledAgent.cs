@@ -76,7 +76,7 @@ namespace DataUpdate
             t = task;
             if (settingsFile.Contains("group"))
             {
-                fetcher.getTimes((int)settingsFile["group"] + 1, false);
+                fetcher.getTimes((int)settingsFile["group"] + 1);
             }
             else
             {

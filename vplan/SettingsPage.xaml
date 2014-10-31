@@ -7,12 +7,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.BackgroundColor="#001f3f"
+    shell:SystemTray.ForegroundColor="#ddd">
 
     <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -23,14 +25,14 @@
 
         <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="CWS INFORMANT" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="Klasse/Kurs" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="CWS INFORMANT" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="Klasse/Kurs"  FontFamily="/Assets/ChampagneLim-Bold.ttf#ChampagneLimousines" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel>
-                <TextBlock Style="{StaticResource PhoneTextSubtleStyle}" Text="Deine Klasse/Jahrgangsstufe"></TextBlock>
+                <TextBlock Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines" Text="Deine Klasse/Jahrgangsstufe"></TextBlock>
                 <toolkit:ListPicker x:Name="classSelect" SelectionChanged="ListPicker_SelectionChanged" ItemsSource="{Binding}"  ExpansionMode="FullScreenOnly">
                     <toolkit:ListPicker.FullModeItemTemplate>
                         <DataTemplate>
@@ -39,7 +41,7 @@
                         </DataTemplate>
                     </toolkit:ListPicker.FullModeItemTemplate>
                 </toolkit:ListPicker>
-                <TextBlock Style="{StaticResource PhoneTextSubtleStyle}" Text="Wie willst du deine Kachel?"></TextBlock>
+                <TextBlock Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines" Text="Wie willst du deine Kachel?"></TextBlock>
                 <toolkit:ListPicker SelectionChanged="notSelect_SelectionChanged" x:Name="notSelect">
                     <toolkit:ListPickerItem Content="Für heute"></toolkit:ListPickerItem>
                     <toolkit:ListPickerItem Content="Für den kommenden Tag"></toolkit:ListPickerItem>

@@ -11,6 +11,7 @@ using Microsoft.Phone.Scheduler;
 using Microsoft.Phone.Shell;
 using vplan.Resources;
 using vplan.ViewModels;
+using UntisExp;
 
 namespace vplan
 {
@@ -172,6 +173,7 @@ namespace vplan
                 // Eine nicht behandelte Ausnahme ist aufgetreten. Unterbrechen und Debugger öffnen
                 Debugger.Break();
             }
+            MessageBox.Show(VConfig.unknownErrTxt, VConfig.unknownErrTtl, MessageBoxButton.OK);
         }
 
         #region Initialisierung der Phone-Anwendung
