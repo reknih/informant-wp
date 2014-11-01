@@ -25,8 +25,6 @@ namespace DataUpdate
         protected int entf;
         protected int raum;
         protected int vera;
-        private List<string> subjects;
-        private Dispatcher dis;
         /// <remarks>
         /// ScheduledAgent-Konstruktor, initialisiert den UnhandledException-Handler
         /// </remarks>

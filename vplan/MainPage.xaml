@@ -125,7 +125,7 @@
         </phone:Panorama>
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar Opacity="0.6" IsVisible="True" IsMenuEnabled="False" ForegroundColor="White" BackgroundColor="DarkSlateBlue">
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="False" Mode="Minimized" ForegroundColor="White">
             <shell:ApplicationBarIconButton IconUri="Assets/sync.png" Click="refreshBtn_Click" x:Name="refreshBtn" Text="Aktualisieren"></shell:ApplicationBarIconButton>
             <shell:ApplicationBarIconButton IconUri="Assets/settings.png" Click="setGroup_Click" x:Name="setGroup" Text="Klasse wählen"></shell:ApplicationBarIconButton>
         </shell:ApplicationBar>
