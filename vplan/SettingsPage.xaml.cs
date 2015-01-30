@@ -29,6 +29,10 @@ namespace vplan
             fetcher = new Fetcher(Alert, refresh);
             fetcher.getClasses();
             DataContext = Groups;
+            if (settings.read("group") == null)
+            {
+                settings.write("group", 0);
+            }
             // Datenkontext des Listenfeldsteuerelements auf die Beispieldaten festlegen
 
         }
