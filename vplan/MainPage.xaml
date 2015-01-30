@@ -37,7 +37,7 @@
          -->
 
          <!--Panoramasteuerelement-->
-        <phone:Panorama Title="CWS Informant" Foreground="White" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro">
+        <phone:Panorama x:Name="Pano"  Title="CWS Informant" Foreground="White" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro">
             <phone:Panorama.TitleTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -51,17 +51,17 @@
             </phone:Panorama.Background>
 
             <!--Panoramaelement eins-->
-            <phone:PanoramaItem Header="Agenda">
+            <phone:PanoramaItem x:Name="Agenda1"  Header="Agenda">
                 <phone:PanoramaItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <TextBlock Text="{Binding}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines"></TextBlock>
+                            <TextBlock  Text="{Binding}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines" Loaded="agenda1Titel_loaded"></TextBlock>
                         </StackPanel>
                     </DataTemplate>
                 </phone:PanoramaItem.HeaderTemplate>
 
                 <!--Einzeilige Liste mit Textumbruch-->
-                <phone:LongListSelector Margin="0,0,-22,30" ItemsSource="{Binding}">
+                <phone:LongListSelector x:Name="Agenda1Panel" Margin="0,0,-22,30" ItemsSource="{Binding}" Loaded="agenda1Panel_loaded">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="0,-6,0,12">
@@ -72,8 +72,30 @@
                     </phone:LongListSelector.ItemTemplate>
                 </phone:LongListSelector>
             </phone:PanoramaItem>
-
             <!--Panoramaelement zwei-->
+            <phone:PanoramaItem x:Name="Agenda2"  Header="Agenda" Loaded="agenda2_loaded">
+            	<phone:PanoramaItem.HeaderTemplate>
+            		<DataTemplate>
+            			<StackPanel>
+            				<TextBlock Text="{Binding}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines" Loaded="agenda2Titel_loaded"/>
+            			</StackPanel>
+            		</DataTemplate>
+            	</phone:PanoramaItem.HeaderTemplate>
+
+                <!--Einzeilige Liste mit Textumbruch-->
+            	<phone:LongListSelector x:Name="Agenda2Panel" Margin="0,0,-22,30" ItemsSource="{Binding}">
+            		<phone:LongListSelector.ItemTemplate>
+            			<DataTemplate>
+            				<StackPanel Margin="0,-6,0,12">
+            					<TextBlock Text="{Binding Line1}" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" Foreground="White"/>
+            					<TextBlock Text="{Binding Line2}" FontFamily="/Assets/SourceSansPro-Light.ttf#Source Sans Pro" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}" Foreground="White"/>
+            				</StackPanel>
+            			</DataTemplate>
+            		</phone:LongListSelector.ItemTemplate>
+            	</phone:LongListSelector>
+            </phone:PanoramaItem>
+
+            <!--Panoramaelement drei-->
                 <!--Zweizeilige Liste mit Bildplatzhalter und Textumbruch unter Verwendung eines unverankerten Headers, der beim Bildlauf mitsamt Inhalt bewegt wird-->
             <phone:PanoramaItem Header="News">
                 <phone:PanoramaItem.HeaderTemplate>
@@ -98,6 +120,7 @@
                     </phone:LongListSelector.ItemTemplate>
                 </phone:LongListSelector>
             </phone:PanoramaItem>
+            <!--Panoramaelement vier-->
             <phone:PanoramaItem Header="Über die App">
                 <phone:PanoramaItem.HeaderTemplate>
                     <DataTemplate>

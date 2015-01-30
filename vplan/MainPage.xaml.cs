@@ -12,11 +12,13 @@ using Microsoft.Phone.Shell;
 using System.Windows.Media;
 using UntisExp;
 
+
 namespace vplan
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private ObservableCollection<UntisExp.Data> Vertr = new ObservableCollection<UntisExp.Data>();
+        private ObservableCollection<UntisExp.Data> Vertr1 = new ObservableCollection<UntisExp.Data>();
+        private ObservableCollection<UntisExp.Data> Vertr2 = new ObservableCollection<UntisExp.Data>();
         private Settings settings = new Settings();
         private Fetcher fetcher;
         private ProgressIndicator pi;
@@ -36,21 +38,34 @@ namespace vplan
             SystemTray.SetForegroundColor(this, Color.FromArgb(225, 221, 221, 221));
             fetcher = new Fetcher(Clear, Alert, refresh, add);
 
-            if (settings.read("oldDb") != null)
+            if (settings.read("oldDb1") != null)
             {
-                Vertr = (ObservableCollection<UntisExp.Data>)settings.read("oldDb");
+                Vertr1 = (ObservableCollection<UntisExp.Data>)settings.read("oldDb1");
             }
-            else {
-                Vertr.Add(new UntisExp.Data());
+            else
+            {
+                Vertr1.Add(new UntisExp.Data());
             }
-            
-            // Datenkontext des Listenfeldsteuerelements auf die Beispieldaten festlegen
-            DataContext = Vertr;
+            if (settings.read("oldDb2") != null)
+            {
+                Vertr2 = (ObservableCollection<UntisExp.Data>)settings.read("oldDb2");
+            }
+            if (settings.read("oldDb1Tit") != null)
+            {
+                Agenda1.Header = (String)settings.read("oldDb1Tit");
+            }
+            if (settings.read("oldDb2Tit") != null)
+            {
+                Agenda2.Header = (String)settings.read("oldDb2Tit");
+            }
+            setPanoItems();
 
         }
-        public void Clear() {
+        public void Clear()
+        {
         }
-        public void Alert(string t, string msg, string btn) {
+        public void Alert(string t, string msg, string btn)
+        {
             Dispatcher.BeginInvoke(() =>
             {
                 if (t == VConfig.noPageErrTtl)
@@ -86,7 +101,8 @@ namespace vplan
                 Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);
                 (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
             }
-            else {
+            else
+            {
                 fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule);
             }
             pi.Text = "Vertretungen werden aktualisiert";
@@ -96,17 +112,16 @@ namespace vplan
         }
         public void refresh(List<UntisExp.Data> v1)
         {
+            
 
-            Vertr = new ObservableCollection<UntisExp.Data>(v1);
             Dispatcher.BeginInvoke(() =>
             {
-                DataContext = Vertr;
-                settings.write("oldDb", Vertr);
+                splitUpList(v1);
                 if (v1.Count == 0)
                 {
                     var oc = new ObservableCollection<UntisExp.Data>();
                     oc.Add(new UntisExp.Data());
-                    DataContext = oc;
+                    Agenda1Panel.DataContext = oc;
                 }
                 try
                 {
@@ -130,10 +145,29 @@ namespace vplan
         }
         public void add(UntisExp.Data d)
         {
-            Dispatcher.BeginInvoke(() => {
-                Vertr.Add(d);
+            Dispatcher.BeginInvoke(() =>
+            {
+                if (d.DateHeader)
+                {
+                    if ((String)Agenda1.Header == "Agenda")
+                    {
+                        Agenda1.Header = d.Line1;
+                    }
+                    else if ((String)Agenda2.Header == "Agenda")
+                    {
+                        Agenda2.Header = d.Line1;
+                    }
+                }
+                else if ((String)Agenda2.Header != "Agenda")
+                {
+                    Vertr2.Add(d);
+                }
+                else
+                {
+                    Vertr1.Add(d);
+                }
+                setPanoItems();
                 pi.IsVisible = false;
-                settings.write("oldDb", Vertr);
             });
         }
 
@@ -153,13 +187,15 @@ namespace vplan
             Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
         }
-        protected void reachToPress() {
+        protected void reachToPress()
+        {
             press = new Press();
             try
             {
                 new Fetcher(addNewsEntry, (int)settings.read("group") + 1);
             }
-            catch {
+            catch
+            {
                 new Fetcher(addNewsEntry, 5);
             }
             news = new ObservableCollection<News>();
@@ -191,7 +227,8 @@ namespace vplan
                 PutDelay();
             });
         }
-        protected async Task PutDelay() {
+        protected async Task PutDelay()
+        {
             try
             {
                 await Task.Delay(1500);
@@ -209,6 +246,85 @@ namespace vplan
             settings.write("selectedNews", item);
             Uri uri = new Uri("/NewsItemViewer.xaml", UriKind.Relative);
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+        }
+        private void splitUpList(List<UntisExp.Data> vRaw)
+        {
+            Agenda1.Header = "Agenda";
+            Agenda2.Header = "Agenda";
+            int day = 0;
+            List<UntisExp.Data> v1 = new List<UntisExp.Data>();
+            List<UntisExp.Data> v2 = new List<UntisExp.Data>();
+            foreach (UntisExp.Data elem in vRaw)
+            {
+                if (elem.DateHeader)
+                {
+                    if (day == 0)
+                    {
+                        Agenda1.Header = elem.Line1;
+                    }
+                    else if (day == 1)
+                    {
+                        Agenda2.Header = elem.Line1;
+                    }
+                    day++;
+                }
+                else if (day == 1)
+                {
+                    v1.Add(elem);
+                }
+                else if (day == 2)
+                {
+                    v2.Add(elem);
+                }
+            }
+            Vertr1 = new ObservableCollection<UntisExp.Data>(v1);
+            Vertr2 = new ObservableCollection<UntisExp.Data>(v2);
+            setPanoItems();
+
+        }
+        private void setPanoItems()
+        {
+            if (Vertr2.Count == 0)
+            {
+                Agenda2.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                Agenda2.Visibility = Visibility.Visible;
+            }
+            Agenda1Panel.DataContext = Vertr1;
+            Agenda2Panel.DataContext = Vertr2;
+            settings.write("oldDb1", Vertr1);
+            settings.write("oldDb2", Vertr2);
+            if ((String)Agenda1.Header != "Agenda")
+            {
+                settings.write("oldDb1Tit", Agenda1.Header);
+
+                if ((String)Agenda2.Header != "Agenda")
+                {
+                    settings.write("oldDb2Tit", Agenda2.Header);
+                }
+            }
+        }
+
+        private void agenda2_loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void agenda2Titel_loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void agenda1Panel_loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void agenda1Titel_loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
