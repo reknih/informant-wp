@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Net;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
@@ -11,67 +9,76 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using System.Windows.Media;
 using UntisExp;
+using UntisExp.Containers;
 
 
 namespace vplan
 {
+    // ReSharper disable once RedundantExtendsListEntry
     public partial class MainPage : PhoneApplicationPage
     {
-        private ObservableCollection<UntisExp.Data> Vertr1 = new ObservableCollection<UntisExp.Data>();
-        private ObservableCollection<UntisExp.Data> Vertr2 = new ObservableCollection<UntisExp.Data>();
-        private Settings settings = new Settings();
-        private Fetcher fetcher;
-        private ProgressIndicator pi;
-        private Press press;
-        private ObservableCollection<News> news;
-        public static bool showBGDisabBox = false;
+        private ObservableCollection<Data> _vertr1 = new ObservableCollection<Data>();
+        private ObservableCollection<Data> _vertr2 = new ObservableCollection<Data>();
+        private readonly Settings _settings = new Settings();
+        private readonly Fetcher _fetcher;
+        private readonly ProgressIndicator _pi;
+        private Press _press;
+        private ObservableCollection<News> _news;
+        public static bool ShowBgDisabBox;
         // Konstruktor
         public MainPage()
         {
             InitializeComponent();
-            pi = new ProgressIndicator();
-            pi.IsVisible = true;
-            pi.IsIndeterminate = true;
-            pi.Text = "Vertretungen werden aktualisiert";
-            SystemTray.SetProgressIndicator(this, pi);
+            _pi = new ProgressIndicator
+            {
+                IsVisible = true,
+                IsIndeterminate = true,
+                Text = "Vertretungen werden aktualisiert"
+            };
+            SystemTray.SetProgressIndicator(this, _pi);
             SystemTray.SetBackgroundColor(this, Color.FromArgb(225, 0, 31, 63));
             SystemTray.SetForegroundColor(this, Color.FromArgb(225, 221, 221, 221));
-            fetcher = new Fetcher(Clear, Alert, refresh, add);
-
-            if (settings.read("oldDb1") != null)
+            _fetcher = new Fetcher();
+            _fetcher.RaiseErrorMessage += (sender, e) =>
             {
-                Vertr1 = (ObservableCollection<UntisExp.Data>)settings.read("oldDb1");
+                Alert(e.MessageHead, e.MessageBody, e.MessageButton);
+            };
+            _fetcher.RaiseRetreivedScheduleItems += (sender, e) =>
+            {
+                Refresh(e.Schedule);
+            };
+
+            if (_settings.Read("oldDb1") != null)
+            {
+                _vertr1 = (ObservableCollection<Data>)_settings.Read("oldDb1");
             }
             else
             {
-                Vertr1.Add(new UntisExp.Data());
+                _vertr1.Add(new Data());
             }
-            if (settings.read("oldDb2") != null)
+            if (_settings.Read("oldDb2") != null)
             {
-                Vertr2 = (ObservableCollection<UntisExp.Data>)settings.read("oldDb2");
+                _vertr2 = (ObservableCollection<Data>)_settings.Read("oldDb2");
             }
-            if (settings.read("oldDb1Tit") != null)
+            if (_settings.Read("oldDb1Tit") != null)
             {
-                Agenda1.Header = (String)settings.read("oldDb1Tit");
+                Agenda1.Header = (String)_settings.Read("oldDb1Tit");
             }
-            if (settings.read("oldDb2Tit") != null)
+            if (_settings.Read("oldDb2Tit") != null)
             {
-                Agenda2.Header = (String)settings.read("oldDb2Tit");
+                Agenda2.Header = (String)_settings.Read("oldDb2Tit");
             }
-            setPanoItems();
+            SetPanoItems();
 
-        }
-        public void Clear()
-        {
         }
         public void Alert(string t, string msg, string btn)
         {
             Dispatcher.BeginInvoke(() =>
             {
-                if (t == VConfig.noPageErrTtl)
+                if (t == VConfig.NoPageErrTtl)
                 {
-                    pi.Text = "Nachrichten werden abgefragt";
-                    reachToPress();
+                    _pi.Text = "Nachrichten werden abgefragt";
+                    ReachToPress();
                 }
                 MessageBox.Show(msg, t, MessageBoxButton.OK);
             });
@@ -85,51 +92,54 @@ namespace vplan
             {
                 App.ViewModel.LoadData();
             }
-            if (showBGDisabBox && !(settings.read("BGAgentDisabled") == null ? false : (bool)settings.read("BGAgentDisabled")))
+            if (ShowBgDisabBox && !(_settings.Read("BGAgentDisabled") != null && (bool)_settings.Read("BGAgentDisabled")))
             {
                 MessageBox.Show("Der Hintergrundtask für diese App wurde vom Benutzer deaktiviert!");
-                showBGDisabBox = false;
-                settings.write("BGAgentDisabled", true);
+                ShowBgDisabBox = false;
+                _settings.Write("BGAgentDisabled", true);
             }
-            else if (!showBGDisabBox && (settings.read("BGAgentDisabled") == null ? false : (bool)settings.read("BGAgentDisabled")))
+            else if (!ShowBgDisabBox && (_settings.Read("BGAgentDisabled") != null && (bool)_settings.Read("BGAgentDisabled")))
             {
-                settings.write("BGAgentDisabled", false);
+                _settings.Write("BGAgentDisabled", false);
             }
-            if (settings.read("group") == null)
+            if (_settings.Read("group") == null)
             {
                 MessageBox.Show("Hallo und danke für den Download der App! Wir schicken dich jetzt zur Klassenauswahl, die App merkt sich danach diese Klasse. Wenn du einen Fehler findest schreib ihn uns doch bitte. Denn es ist alles noch ganz neu hier. Wir wünschen viel Ausfall!");
                 Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);
-                (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+                ((PhoneApplicationFrame) Application.Current.RootVisual).Navigate(uri);
             }
             else
             {
-                fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule);
+                _fetcher.GetTimes((int)_settings.Read("group") + 1);
             }
-            pi.Text = "Vertretungen werden aktualisiert";
-            pi.IsVisible = true;
-            SystemTray.SetProgressIndicator(this, pi);
+            _pi.Text = "Vertretungen werden aktualisiert";
+            _pi.IsVisible = true;
+            SystemTray.SetProgressIndicator(this, _pi);
 
         }
-        public void refresh(List<UntisExp.Data> v1)
+        public void Refresh(List<Data> v1)
         {
             
 
             Dispatcher.BeginInvoke(() =>
             {
-                splitUpList(v1);
+                SplitUpList(v1);
                 if (v1.Count == 0)
                 {
-                    var oc = new ObservableCollection<UntisExp.Data>();
-                    oc.Add(new UntisExp.Data());
+                    var oc = new ObservableCollection<Data>();
+                    oc.Add(new Data());
                     Agenda1Panel.DataContext = oc;
                 }
                 try
                 {
-                    pi.Text = "Nachrichten werden abgefragt";
-                    refreshBtn.Click += refreshBtn_Click;
+                    _pi.Text = "Nachrichten werden abgefragt";
+                    RefreshBtn.Click += refreshBtn_Click;
                 }
-                catch { }
-                reachToPress();
+                catch
+                {
+                    // ignored
+                }
+                ReachToPress();
             });
         }
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
@@ -143,118 +153,112 @@ namespace vplan
             }
             base.OnBackKeyPress(e);
         }
-        public void add(UntisExp.Data d)
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                if (d.DateHeader)
-                {
-                    if ((String)Agenda1.Header == "Agenda")
-                    {
-                        Agenda1.Header = d.Line1;
-                    }
-                    else if ((String)Agenda2.Header == "Agenda")
-                    {
-                        Agenda2.Header = d.Line1;
-                    }
-                }
-                else if ((String)Agenda2.Header != "Agenda")
-                {
-                    Vertr2.Add(d);
-                }
-                else
-                {
-                    Vertr1.Add(d);
-                }
-                setPanoItems();
-                pi.IsVisible = false;
-            });
-        }
 
         private void refreshBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                pi.IsVisible = true;
-                refreshBtn.Click -= refreshBtn_Click;
+                _pi.IsVisible = true;
+                RefreshBtn.Click -= refreshBtn_Click;
             }
-            catch { }
-            fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule);
+            catch
+            {
+                // ignored
+            }
+            _fetcher.GetTimes((int)_settings.Read("group") + 1);
         }
 
         private void setGroup_Click(object sender, EventArgs e)
         {
             Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);
-            (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+            ((PhoneApplicationFrame) Application.Current.RootVisual).Navigate(uri);
         }
-        protected void reachToPress()
+
+        private void ReachToPress()
         {
-            press = new Press();
+            _press = new Press();
+            _fetcher.RaiseRetreivedNewsItem += (sender, e) =>
+            {
+                AddNewsEntry(e.News);
+            };
             try
             {
-                new Fetcher(addNewsEntry, (int)settings.read("group") + 1);
+                _fetcher.GetTimes((int)_settings.Read("group") + 1, Activity.GetNews);
             }
             catch
             {
-                new Fetcher(addNewsEntry, 5);
+                _fetcher.GetTimes(5, Activity.GetNews);
             }
-            news = new ObservableCollection<News>();
-            press.getCalledBackForNews(addNewsEntrys);
-            newspanel.DataContext = news;
+            _news = new ObservableCollection<News>();
+            _press.RaiseRetreivedNewsItems += (sender, e) =>
+            {
+                AddNewsEntrys(e.News);
+            };
+            _press.FireEventForNews();
+            Newspanel.DataContext = _news;
         }
-        protected void addNewsEntry(News n)
+
+        private void AddNewsEntry(News n)
         {
             Dispatcher.BeginInvoke(delegate
             {
-                if (!news.Contains(n))
+                if (!_news.Contains(n))
                 {
-                    news.Insert(0, n);
-                    newspanel.DataContext = news;
-                    newspanel.ScrollTo(news[0]);
+                    _news.Insert(0, n);
+                    Newspanel.DataContext = _news;
+                    Newspanel.ScrollTo(_news[0]);
                 }
             });
         }
-        protected void addNewsEntrys(List<News> n)
+
+        private void AddNewsEntrys(List<News> n)
         {
             Dispatcher.BeginInvoke(delegate
             {
                 foreach (var item in n)
                 {
-                    news.Add(item);
+                    _news.Add(item);
                 }
-                newspanel.DataContext = news;
-                pi.Text = Helpers.getRandomArrayItem(VConfig.successJokes);
+                Newspanel.DataContext = _news;
+                _pi.Text = Helpers.GetRandomArrayItem(VConfig.SuccessJokes);
+#pragma warning disable 4014
                 PutDelay();
+#pragma warning restore 4014
             });
         }
-        protected async Task PutDelay()
+
+        // ReSharper disable once UnusedMethodReturnValue.Local
+        private async Task PutDelay()
         {
             try
             {
                 await Task.Delay(1500);
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
             Dispatcher.BeginInvoke(() =>
             {
-                pi.IsVisible = false;
+                _pi.IsVisible = false;
             });
         }
 
         private void newspanel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var item = ((LongListSelector)sender).SelectedItem as News;
-            settings.write("selectedNews", item);
+            _settings.Write("selectedNews", item);
             Uri uri = new Uri("/NewsItemViewer.xaml", UriKind.Relative);
-            (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+            ((PhoneApplicationFrame) Application.Current.RootVisual).Navigate(uri);
         }
-        private void splitUpList(List<UntisExp.Data> vRaw)
+        private void SplitUpList(List<Data> vRaw)
         {
             Agenda1.Header = "Agenda";
             Agenda2.Header = "Agenda";
             int day = 0;
-            List<UntisExp.Data> v1 = new List<UntisExp.Data>();
-            List<UntisExp.Data> v2 = new List<UntisExp.Data>();
-            foreach (UntisExp.Data elem in vRaw)
+            List<Data> v1 = new List<Data>();
+            List<Data> v2 = new List<Data>();
+            foreach (Data elem in vRaw)
             {
                 if (elem.DateHeader)
                 {
@@ -277,14 +281,14 @@ namespace vplan
                     v2.Add(elem);
                 }
             }
-            Vertr1 = new ObservableCollection<UntisExp.Data>(v1);
-            Vertr2 = new ObservableCollection<UntisExp.Data>(v2);
-            setPanoItems();
+            _vertr1 = new ObservableCollection<Data>(v1);
+            _vertr2 = new ObservableCollection<Data>(v2);
+            SetPanoItems();
 
         }
-        private void setPanoItems()
+        private void SetPanoItems()
         {
-            if (Vertr2.Count == 0)
+            if (_vertr2.Count == 0)
             {
                 Agenda2.Visibility = Visibility.Collapsed;
             }
@@ -292,17 +296,17 @@ namespace vplan
             {
                 Agenda2.Visibility = Visibility.Visible;
             }
-            Agenda1Panel.DataContext = Vertr1;
-            Agenda2Panel.DataContext = Vertr2;
-            settings.write("oldDb1", Vertr1);
-            settings.write("oldDb2", Vertr2);
+            Agenda1Panel.DataContext = _vertr1;
+            Agenda2Panel.DataContext = _vertr2;
+            _settings.Write("oldDb1", _vertr1);
+            _settings.Write("oldDb2", _vertr2);
             if ((String)Agenda1.Header != "Agenda")
             {
-                settings.write("oldDb1Tit", Agenda1.Header);
+                _settings.Write("oldDb1Tit", Agenda1.Header);
 
                 if ((String)Agenda2.Header != "Agenda")
                 {
-                    settings.write("oldDb2Tit", Agenda2.Header);
+                    _settings.Write("oldDb2Tit", Agenda2.Header);
                 }
             }
         }

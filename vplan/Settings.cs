@@ -1,40 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO.IsolatedStorage;
+﻿using System.IO.IsolatedStorage;
+using UntisExp.Interfaces;
 
 
 namespace vplan
 {
-    class Settings
+    class Settings : ISettings
     {
-        IsolatedStorageSettings settingsFile = IsolatedStorageSettings.ApplicationSettings;
-        public bool write(string key, object data)
+        readonly IsolatedStorageSettings _settingsFile = IsolatedStorageSettings.ApplicationSettings;
+        public void Write(string key, object data)
         {
             try
             {
-                if (settingsFile.Contains(key))
+                if (_settingsFile.Contains(key))
                 {
-                    settingsFile[key] = data;
-                    settingsFile.Save();
-                    return true;
+                    _settingsFile[key] = data;
+                    _settingsFile.Save();
+                    return;
                 }
                 else
                 {
-                    settingsFile.Add(key, data);
-                    settingsFile.Save();
-                    return true;
+                    _settingsFile.Add(key, data);
+                    _settingsFile.Save();
+                    return;
                 }
             }
-            catch { return false; }
+            catch {
+                return;
+            }
         }
-        public object read(string key)
+        public object Read(string key)
         {
-            if (settingsFile.Contains(key))
+            if (_settingsFile.Contains(key))
             {
-                return settingsFile[key];
+                return _settingsFile[key];
             }
             else { return null; }
         }

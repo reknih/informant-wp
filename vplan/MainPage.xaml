@@ -106,7 +106,7 @@
                     </DataTemplate>
                 </phone:PanoramaItem.HeaderTemplate>
                 <!--Zweizeilige Liste mit Bildplatzhalter und Textumbruch unter Verwendung eines unverankerten Headers, der beim Bildlauf mitsamt Inhalt bewegt wird-->
-                <phone:LongListSelector Margin="0,0,-22,30" x:Name="newspanel" ItemsSource="{Binding}" SelectionChanged="newspanel_SelectionChanged">
+                <phone:LongListSelector Margin="0,0,-22,30" x:Name="Newspanel" ItemsSource="{Binding}" SelectionChanged="newspanel_SelectionChanged">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Margin="12,2,0,4" Height="105" Width="432">
@@ -149,8 +149,8 @@
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="False" Mode="Minimized" ForegroundColor="White">
-            <shell:ApplicationBarIconButton IconUri="Assets/sync.png" Click="refreshBtn_Click" x:Name="refreshBtn" Text="Aktualisieren"></shell:ApplicationBarIconButton>
-            <shell:ApplicationBarIconButton IconUri="Assets/settings.png" Click="setGroup_Click" x:Name="setGroup" Text="Klasse wählen"></shell:ApplicationBarIconButton>
+            <shell:ApplicationBarIconButton IconUri="Assets/sync.png" Click="refreshBtn_Click" x:Name="RefreshBtn" Text="Aktualisieren"></shell:ApplicationBarIconButton>
+            <shell:ApplicationBarIconButton IconUri="Assets/settings.png" Click="setGroup_Click" x:Name="SetGroup" Text="Klasse wählen"></shell:ApplicationBarIconButton>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

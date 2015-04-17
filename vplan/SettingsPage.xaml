@@ -33,7 +33,7 @@
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel>
                 <TextBlock Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines" Text="Deine Klasse/Jahrgangsstufe"></TextBlock>
-                <toolkit:ListPicker x:Name="classSelect" SelectionChanged="ListPicker_SelectionChanged" ItemsSource="{Binding}"  ExpansionMode="FullScreenOnly">
+                <toolkit:ListPicker x:Name="ClassSelect" SelectionChanged="ListPicker_SelectionChanged" ItemsSource="{Binding}"  ExpansionMode="FullScreenOnly">
                     <toolkit:ListPicker.FullModeItemTemplate>
                         <DataTemplate>
                             <toolkit:ListPickerItem Content="{Binding ClassName}" FontSize="30" Margin="1">
@@ -42,7 +42,7 @@
                     </toolkit:ListPicker.FullModeItemTemplate>
                 </toolkit:ListPicker>
                 <TextBlock Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines" Text="Wie willst du deine Kachel?"></TextBlock>
-                <toolkit:ListPicker SelectionChanged="notSelect_SelectionChanged" x:Name="notSelect">
+                <toolkit:ListPicker SelectionChanged="notSelect_SelectionChanged" x:Name="NotSelect">
                     <toolkit:ListPickerItem Content="Für heute"></toolkit:ListPickerItem>
                     <toolkit:ListPickerItem Content="Für den kommenden Tag"></toolkit:ListPickerItem>
                     <toolkit:ListPickerItem Content="Für alle beide!"></toolkit:ListPickerItem>

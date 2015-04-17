@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Diagnostics;
-using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
@@ -15,9 +12,10 @@ using UntisExp;
 
 namespace vplan
 {
+    // ReSharper disable once RedundantExtendsListEntry
     public partial class App : Application
     {
-        private static MainViewModel viewModel = null;
+        private static MainViewModel _viewModel;
 
         /// <summary>
         /// Eine statisches ViewModel, an das die Ansichten gebunden werden.
@@ -28,10 +26,7 @@ namespace vplan
             get
             {
                 // Erstellung des Ansichtsmodells verzögern bis erforderlich
-                if (viewModel == null)
-                    viewModel = new MainViewModel();
-
-                return viewModel;
+                return _viewModel ?? (_viewModel = new MainViewModel());
             }
         }
 
@@ -86,19 +81,20 @@ namespace vplan
         // Dieser Code wird beim Reaktivieren der Anwendung nicht ausgeführt
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            PeriodicTask task;
             // Obtain a reference to the period task, if one exists
-            task = ScheduledActionService.Find("DataUpdate") as PeriodicTask;
+            var task = ScheduledActionService.Find("DataUpdate") as PeriodicTask;
             if (task != null)
             {
                 ScheduledActionService.Remove("DataUpdate");
             }
 
-            task = new PeriodicTask("DataUpdate");
+            task = new PeriodicTask("DataUpdate")
+            {
+                Description = "Hier aktualisieren wir den Zähler auf der Kachel. Uuuunglaublich!"
+            };
 
             // The description is required for periodic agents. This is the string that the user
             // will see in the background services Settings page on the device.
-            task.Description = "Hier aktualisieren wir den Zähler auf der Kachel. Uuuunglaublich!";
 
             // Place the call to Add in a try block in case the user has disabled agents.
             try
@@ -114,7 +110,7 @@ namespace vplan
             {
                 if (exception.Message.Contains("BNS Error: The action is disabled"))
                 {
-                    MainPage.showBGDisabBox = true;
+                    MainPage.ShowBgDisabBox = true;
                 }
 
                 if (exception.Message.Contains("BNS Error: The maximum number of ScheduledActions of this type have already been added."))
@@ -136,9 +132,9 @@ namespace vplan
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
             // Sicherstellen, dass der Anwendungszustand ordnungsgemäß wiederhergestellt wird
-            if (!App.ViewModel.IsDataLoaded)
+            if (!ViewModel.IsDataLoaded)
             {
-                App.ViewModel.LoadData();
+                ViewModel.LoadData();
             }
         }
 
@@ -173,18 +169,18 @@ namespace vplan
                 // Eine nicht behandelte Ausnahme ist aufgetreten. Unterbrechen und Debugger öffnen
                 Debugger.Break();
             }
-            MessageBox.Show(VConfig.unknownErrTxt, VConfig.unknownErrTtl, MessageBoxButton.OK);
+            MessageBox.Show(VConfig.UnknownErrTxt, VConfig.UnknownErrTtl, MessageBoxButton.OK);
         }
 
         #region Initialisierung der Phone-Anwendung
 
         // Doppelte Initialisierung vermeiden
-        private bool phoneApplicationInitialized = false;
+        private bool _phoneApplicationInitialized;
 
         // Fügen Sie keinen zusätzlichen Code zu dieser Methode hinzu
         private void InitializePhoneApplication()
         {
-            if (phoneApplicationInitialized)
+            if (_phoneApplicationInitialized)
                 return;
 
             // Frame erstellen, aber noch nicht als RootVisual festlegen. Dadurch kann der Begrüßungsbildschirm
@@ -199,7 +195,7 @@ namespace vplan
             RootFrame.Navigated += CheckForResetNavigation;
 
             // Sicherstellen, dass keine erneute Initialisierung erfolgt
-            phoneApplicationInitialized = true;
+            _phoneApplicationInitialized = true;
         }
 
         // Fügen Sie keinen zusätzlichen Code zu dieser Methode hinzu
@@ -233,7 +229,7 @@ namespace vplan
             // Löschen Sie zur Sicherstellung der UI-Konsistenz den gesamten Seitenstapel
             while (RootFrame.RemoveBackEntry() != null)
             {
-                ; // unternehmen Sie nichts
+                // unternehmen Sie nichts
             }
         }
 

@@ -1,30 +1,27 @@
 ﻿using System.Diagnostics;
 using System.Windows;
-using System.Windows.Threading;
-using System;
 using Microsoft.Phone.Scheduler;
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Shell;
-using System.Collections.ObjectModel;
 using UntisExp;
+using UntisExp.Containers;
 
 namespace DataUpdate
 {
     public class ScheduledAgent : ScheduledTaskAgent
     {
-        protected IsolatedStorageSettings settingsFile = IsolatedStorageSettings.ApplicationSettings;
-        public Fetcher fetcher;
-        protected string dayStr = " ";
-        private ScheduledTask t;
-        protected string kachel1;
-        protected string kachel2;
-        protected string kachel3;
-        protected int vert;
-        protected int mitb;
-        protected int entf;
-        protected int raum;
-        protected int vera;
+        private readonly IsolatedStorageSettings _settingsFile = IsolatedStorageSettings.ApplicationSettings;
+        private Fetcher _fetcher;
+        private string _dayStr = " ";
+        private string Kachel1;
+        protected string Kachel2;
+        protected string Kachel3;
+        protected int Vert;
+        protected int Mitb;
+        protected int Entf;
+        protected int Raum;
+        protected int Vera;
         /// <remarks>
         /// ScheduledAgent-Konstruktor, initialisiert den UnhandledException-Handler
         /// </remarks>
@@ -35,6 +32,11 @@ namespace DataUpdate
             {
                 Application.Current.UnhandledException += UnhandledException;
             });
+        }
+
+        public ScheduledAgent(string kachel1)
+        {
+            Kachel1 = kachel1;
         }
 
         /// Code, der bei nicht behandelten Ausnahmen ausgeführt wird
@@ -59,97 +61,105 @@ namespace DataUpdate
         protected override void OnInvoke(ScheduledTask task)
         {
             //TODO: Code zum Ausführen der Aufgabe im Hintergrund hinzufügen
-            if (settingsFile.Contains("mode") != true)
+            if (_settingsFile.Contains("mode") != true)
             {
                 NotifyComplete();
             }
-            if ((int)settingsFile["mode"] == 0) {
-                dayStr = " heute ";
+            if ((int)_settingsFile["mode"] == 0) {
+                _dayStr = " heute ";
             }
-            else if ((int)settingsFile["mode"] == 1)
+            else if ((int)_settingsFile["mode"] == 1)
             {
-                dayStr = " morgen ";
+                _dayStr = " morgen ";
             }
-            fetcher = new Fetcher(Stop, Proceed, (int)settingsFile["mode"]);
-            t = task;
-            if (settingsFile.Contains("group"))
+            _fetcher = new Fetcher((int)_settingsFile["mode"]);
+            _fetcher.RaiseErrorMessage += (sender, e) =>
             {
-                fetcher.getTimes((int)settingsFile["group"] + 1);
+                Stop();
+            };
+            _fetcher.RaiseRetreivedScheduleItems += (sender, e) =>
+            {
+                Proceed(e.Schedule);
+            };
+            if (_settingsFile.Contains("group"))
+            {
+                _fetcher.GetTimes((int)_settingsFile["group"] + 1);
             }
             else
             {
                 Stop();
             }
         }
-        public void Proceed(List<Data> v1)
+
+        private void Proceed(List<Data> v1)
         {
-                ShellToast toast = new ShellToast();
-                toast.Title = "Informant";
-                if (v1.Count == 0)
+            ShellToast toast = new ShellToast {Title = "Informant"};
+            if (v1.Count == 0)
                 {
-                    toast.Content = "Es gibt" + dayStr + "keine Vertretungen.";
+                    toast.Content = "Es gibt" + _dayStr + "keine Vertretungen.";
                 }
                 else if (v1.Count == 1)
                 {
-                    toast.Content = "Es gibt" + dayStr + v1.Count.ToString() + " Vertretung!";
+                    toast.Content = "Es gibt" + _dayStr + v1.Count.ToString() + " Vertretung!";
                 }
                 if (v1.Count == 0) { }
-                toast.Content = "Es gibt" + dayStr + v1.Count.ToString() + " Vertretungsstunden!";
+                toast.Content = "Es gibt" + _dayStr + v1.Count.ToString() + " Vertretungsstunden!";
                 try
                 {
-                    if ((bool)settingsFile["notify"] == true && (int)settingsFile["oldCount"] != v1.Count)
+                    if ((bool)_settingsFile["notify"] && (int)_settingsFile["oldCount"] != v1.Count)
                     {
                         toast.Show();
-                        write("oldCount", v1.Count);
+                        Write("oldCount", v1.Count);
                     }
                 }
                 catch
                 {
                     try
                     {
-                        if ((bool)settingsFile["notify"] == true)
+                        if ((bool)_settingsFile["notify"])
                         {
                             //toast.Show();
-                            write("oldCount", v1.Count);
+                            Write("oldCount", v1.Count);
                         }
                     }
                     catch
-                    { }
+                    {
+                        // ignored
+                    }
                 }
-                IconicTileData TileData = new IconicTileData()
+                IconicTileData tileData = new IconicTileData()
                 {
                     Title = "CWS Informant",
                     Count = v1.Count,
                 };
                 foreach (var tile in ShellTile.ActiveTiles)
                 {
-                    tile.Update(TileData);
+                    tile.Update(tileData);
                 }
                 Stop();
         }
-        public void Stop()
+
+        private void Stop()
         {
 #if DEBUG
             ScheduledActionService.LaunchForTest(t.Name, TimeSpan.FromSeconds(60));
 #endif
             NotifyComplete();
         }
-        public bool write(string key, object data)
+
+        private bool Write(string key, object data)
         {
             try
             {
-                if (settingsFile.Contains(key))
+                if (_settingsFile.Contains(key))
                 {
-                    settingsFile[key] = data;
-                    settingsFile.Save();
+                    _settingsFile[key] = data;
+                    _settingsFile.Save();
                     return true;
                 }
-                else
-                {
-                    settingsFile.Add(key, data);
-                    settingsFile.Save();
-                    return true;
-                }
+                _settingsFile.Add(key, data);
+                _settingsFile.Save();
+                return true;
             }
             catch {
                 return false;

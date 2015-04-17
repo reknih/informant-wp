@@ -88,7 +88,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\UntisExp\informant-core\UntisExport.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\..\code\UntisExp\informant-core\UntisExport.csproj">
       <Project>{7e2de76a-bf93-4b36-9223-d996f1c746cd}</Project>
       <Name>UntisExport</Name>
     </ProjectReference>

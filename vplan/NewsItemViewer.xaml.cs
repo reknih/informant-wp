@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
-using Microsoft.Phone.Shell;
-using UntisExp;
+using UntisExp.Containers;
 
 namespace vplan
 {
+    // ReSharper disable once RedundantExtendsListEntry
+    // ReSharper disable once UnusedMember.Global
     public partial class NewsItemViewer : PhoneApplicationPage
     {
-        Settings settings = new Settings();
-        News theNews;
+        readonly Settings _settings = new Settings();
+        News _theNews;
         public NewsItemViewer()
         {
             InitializeComponent();
@@ -24,19 +21,18 @@ namespace vplan
         {
             try
             {
-                theNews = (News)settings.read("selectedNews");
-                DataContext = theNews;
+                _theNews = (News)_settings.Read("selectedNews");
+                DataContext = _theNews;
             }
             catch {
                 Uri uri = new Uri("/MainPage.xaml", UriKind.Relative);
-                (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+                ((PhoneApplicationFrame) Application.Current.RootVisual).Navigate(uri);
             }
         }
 
         private void webBtn_Click(object sender, EventArgs e)
         {
-            var wbt = new WebBrowserTask();
-            wbt.Uri = theNews.Source;
+            var wbt = new WebBrowserTask {Uri = _theNews.Source};
             wbt.Show();
         }
     }

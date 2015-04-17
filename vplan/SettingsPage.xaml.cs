@@ -1,37 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using UntisExp;
+using UntisExp.Containers;
 
 namespace vplan
 {
+    // ReSharper disable once UnusedMember.Global
+    // ReSharper disable once RedundantExtendsListEntry
     public partial class SettingsPage : PhoneApplicationPage
     {
-        private ObservableCollection<Group> Groups = new ObservableCollection<Group>();
-        private bool loaded;
-        private Settings settings = new Settings();
-        private ProgressIndicator pi;
+        private ObservableCollection<Group> _groups = new ObservableCollection<Group>();
+        private bool _loaded;
+        private readonly Settings _settings = new Settings();
+        private readonly ProgressIndicator _pi;
         public SettingsPage()
         {
             InitializeComponent();
-            pi = new ProgressIndicator();
-            pi.IsVisible = true;
-            pi.IsIndeterminate = true;
-            pi.Text = "Vertretungen werden geladen";
-            Fetcher fetcher;
-            fetcher = new Fetcher(Alert, refresh);
-            fetcher.getClasses();
-            DataContext = Groups;
-            if (settings.read("group") == null)
+            _pi = new ProgressIndicator {IsVisible = true, IsIndeterminate = true, Text = "Vertretungen werden geladen"};
+            var fetcher = new Fetcher();
+            fetcher.RaiseErrorMessage += (sender, e) =>
             {
-                settings.write("group", 0);
+                Alert(e.MessageHead, e.MessageBody);
+            };
+            fetcher.RaiseRetreivedGroupItems += (sender, e) =>
+            {
+                Refresh(e.Groups);
+            };
+            fetcher.GetClasses();
+            DataContext = _groups;
+            if (_settings.Read("group") == null)
+            {
+                _settings.Write("group", 0);
             }
             // Datenkontext des Listenfeldsteuerelements auf die Beispieldaten festlegen
 
@@ -40,53 +45,61 @@ namespace vplan
         {
             try
             {
-                notSelect.SelectedIndex = (int)settings.read("mode");
+                NotSelect.SelectedIndex = (int)_settings.Read("mode");
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
-        public void refresh(List<Group> grp)
+
+        private void Refresh(List<Group> grp)
         {
-            Groups = new ObservableCollection<Group>(grp);
+            _groups = new ObservableCollection<Group>(grp);
             Dispatcher.BeginInvoke(() =>
             {
-                DataContext = Groups;
-                pi.IsVisible = false;
-                loaded = true;
-                if (settings.read("group") != null)
+                DataContext = _groups;
+                _pi.IsVisible = false;
+                _loaded = true;
+                if (_settings.Read("group") != null)
                 {
-                    classSelect.SelectedIndex = (int)settings.read("group");
+                    ClassSelect.SelectedIndex = (int)_settings.Read("group");
                 }
             });
         }
 
         private void ListPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (loaded) {
-                settings.write("group", classSelect.SelectedIndex);
+            if (_loaded) {
+                _settings.Write("group", ClassSelect.SelectedIndex);
             }
         }
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
         {
             Uri uri = new Uri("/MainPage.xaml", UriKind.Relative);
-            (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+            ((PhoneApplicationFrame) Application.Current.RootVisual).Navigate(uri);
             base.OnBackKeyPress(e);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Uri uri = new Uri("/MainPage.xaml", UriKind.Relative);
-            (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+            ((PhoneApplicationFrame) Application.Current.RootVisual).Navigate(uri);
         }
 
         private void notSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                settings.write("mode", notSelect.SelectedIndex);
+                _settings.Write("mode", NotSelect.SelectedIndex);
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
-        public void Alert(string t, string msg, string btn)
+
+        private void Alert(string t, string msg)
         {
             Dispatcher.BeginInvoke(() =>
             {

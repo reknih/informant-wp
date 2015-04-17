@@ -44,7 +44,7 @@
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Opacity="0.6" IsVisible="True" IsMenuEnabled="False" ForegroundColor="White" BackgroundColor="Gray">
-            <shell:ApplicationBarIconButton Click="webBtn_Click" IconUri="Assets/feature.search.png" x:Name="webBtn" Text="Im Web"></shell:ApplicationBarIconButton>
+            <shell:ApplicationBarIconButton Click="webBtn_Click" IconUri="Assets/feature.search.png" x:Name="WebBtn" Text="Im Web"></shell:ApplicationBarIconButton>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>
