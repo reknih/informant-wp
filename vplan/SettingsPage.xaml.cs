@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
@@ -22,6 +23,12 @@ namespace vplan
         public SettingsPage()
         {
             InitializeComponent();
+#if LEHRER
+            if (_settings.Read("group") == null)
+            {
+                showPopup(false);
+            }
+#endif
             _pi = new ProgressIndicator {IsVisible = true, IsIndeterminate = true, Text = "Vertretungen werden geladen"};
             var fetcher = new Fetcher();
             fetcher.RaiseErrorMessage += (sender, e) =>
@@ -52,6 +59,60 @@ namespace vplan
                 // ignored
             }
         }
+#if LEHRER
+        private void showPopup(bool wrongPw)
+        {
+                ContentPanel.Visibility = Visibility.Collapsed;
+                //LayoutRoot.Background=Application.Current.Resources.
+                PasswordBox pwBox = new PasswordBox();
+
+                TiltEffect.SetIsTiltEnabled(pwBox, true);
+                CustomMessageBox messageBox = new CustomMessageBox()
+                {
+                    Caption = "Bitte Passwort eingeben",
+                    Content = pwBox,
+                    LeftButtonContent = "ok",
+                    IsRightButtonEnabled = false,
+                    IsFullScreen = false
+                };
+                if (wrongPw)
+                {
+                    messageBox.Message = "Falsches Passwort!!";
+                }
+                else{
+                    messageBox.Message = UntisExp.VConfig.enterPW;
+                }
+
+                
+
+                //Create a new custom message box
+                
+
+                //Define the dismissed event handler
+                messageBox.Dismissed += (s1, e1) =>
+                {
+                    switch (e1.Result)
+                    {
+                        case CustomMessageBoxResult.LeftButton:
+                            if (pwBox.Password == UntisExp.VConfig.password)
+                            {
+                                _settings.Write("group", 0);
+                                ContentPanel.Visibility = Visibility.Visible;
+                            }
+                            else { showPopup(true); return; }
+                            break;
+                        case CustomMessageBoxResult.None:
+                            Application.Current.Terminate();
+                            break;
+                        default:
+                            break;
+                    }
+                };
+
+                //launch the task
+                messageBox.Show();
+        }
+#endif
 
         private void Refresh(List<Group> grp)
         {
