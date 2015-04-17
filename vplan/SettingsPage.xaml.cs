@@ -41,12 +41,13 @@ namespace vplan
             };
             fetcher.GetClasses();
             DataContext = _groups;
+#if !LEHRER
             if (_settings.Read("group") == null)
             {
                 _settings.Write("group", 0);
             }
             // Datenkontext des Listenfeldsteuerelements auf die Beispieldaten festlegen
-
+#endif
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
