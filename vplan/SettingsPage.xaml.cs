@@ -97,8 +97,21 @@ namespace vplan
                             if (pwBox.Password == VConfig.Password)
                             {
                                 _settings.Write("lehrer", 1);
+                                _fetcher = new Fetcher();
+                                _fetcher.RaiseErrorMessage += (sender, e) =>
+                                {
+                                    Alert(e.MessageHead, e.MessageBody);
+                                };
+                                _fetcher.RaiseRetreivedGroupItems += (sender, e) =>
+                                {
+                                    Refresh(e.Groups);
+                                };
                                 _fetcher.GetClasses();
-                                ContentPanel.Visibility = Visibility.Visible;
+                                try
+                                {
+                                    ContentPanel.Visibility = Visibility.Visible;
+                                }
+                                catch (NullReferenceException) { }
 
                             }
                             else

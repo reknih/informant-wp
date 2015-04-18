@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="de-DE" />
-  <App  xmlns="" ProductID="{2c137d8b-d5d3-4d89-8445-535e7c3d4a32}" Title="CWS Informant Lehrer BETA" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="vplan author" Description="Sample description" Publisher="vplan" PublisherID="{1f789041-e0f7-4b23-b332-981dea7fd6da}">
+  <App xmlns="" ProductID="{2c137d8b-d5d3-4d89-8445-535e7c3d4a32}" Title="CWS Informant für Lehrer" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Benedikt Ecihner &amp; Martin Haug" Description="Der Vertretungsplan der Christian-Wirth-Schule, Usingen, jetzt auch für Leherer" Publisher="central_link" PublisherID="{1f789041-e0f7-4b23-b332-981dea7fd6da}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
@@ -15,10 +15,10 @@
     <Tokens>
       <PrimaryToken TokenID="vplanToken" TaskName="_default">
         <TemplateIconic>
-          <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\IconicTileSmall.png</SmallImageURI>
+          <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\IconicTileSmallTeacher.png</SmallImageURI>
           <Count>0</Count>
-          <IconImageURI IsRelative="true" IsResource="false">Assets\Tiles\IconicTileMediumLarge.png</IconImageURI>
-          <Title>CWS Informant Lehrer BETA</Title>
+          <IconImageURI IsRelative="true" IsResource="false">Assets\Tiles\IconicTileMediumLargeTeacher.png</IconImageURI>
+          <Title>CWS Informant Lehrer</Title>
           <Message>
           </Message>
           <BackgroundColor>
