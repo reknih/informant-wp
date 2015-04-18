@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -89,7 +89,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-Lehrer|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-Lehrer|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug-Lehrer\</OutputPath>
     <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;LEHRER</DefineConstants>
@@ -229,24 +229,25 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
-    <None Include="Properties\WMAppManifestLehrer.xml" Condition=" '$(Configuration)'=='Release-Lehrer'">
-           <SubType>Designer</SubType>
-         </None>
-        <None Include="Properties\WMAppManifestDebugLehrer.xml" Condition=" '$(Configuration)'=='Debug-Lehrer'">
-          <SubType>Designer</SubType>
-         </None>
-         <None Include="Properties\WMAppManifest.xml" Condition=" '$(Configuration)'=='Release'">
-           <SubType>Designer</SubType>
-         </None>
-         <None Include="Properties\WMAppManifestDebug.xml" Condition=" '$(Configuration)'=='Debug'" >
-          <SubType>Designer</SubType>
-         </None>
-        
+    <None Include="Properties\WMAppManifest.xml" Condition=" '$(Configuration)'=='Release-Lehrer'">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\WMAppManifestDebugLehrer.xml" Condition=" '$(Configuration)'=='Debug-Lehrer'">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\WMAppManifestSch[ler.xml" Condition=" '$(Configuration)'=='Release'">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\WMAppManifestDebug.xml" Condition=" '$(Configuration)'=='Debug'">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\LockImage.png" />
     <Content Include="Assets\settings.png" />
     <Content Include="Assets\sync.png" />
+    <Content Include="Assets\Tiles\IconicTileMediumLargeTeacher.png" />
+    <Content Include="Assets\Tiles\IconicTileSmallTeacher.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
@@ -280,7 +281,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\UntisExp\informant-core\UntisExport.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\..\code\UntisExp\informant-core\UntisExport.csproj">
       <Project>{7e2de76a-bf93-4b36-9223-d996f1c746cd}</Project>
       <Name>UntisExport</Name>
     </ProjectReference>

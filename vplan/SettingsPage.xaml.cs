@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
@@ -18,30 +18,35 @@ namespace vplan
     {
         private ObservableCollection<Group> _groups = new ObservableCollection<Group>();
         private bool _loaded;
-        private readonly Settings _settings = new Settings();
+        private Settings _settings = new Settings();
         private readonly ProgressIndicator _pi;
+        private Fetcher _fetcher;
         public SettingsPage()
         {
-            InitializeComponent();
-#if LEHRER
-            if (_settings.Read("group") == null)
-            {
-                showPopup(false);
-            }
-#endif
-            _pi = new ProgressIndicator {IsVisible = true, IsIndeterminate = true, Text = "Vertretungen werden geladen"};
-            var fetcher = new Fetcher();
-            fetcher.RaiseErrorMessage += (sender, e) =>
+            _fetcher = new Fetcher();
+            _fetcher.RaiseErrorMessage += (sender, e) =>
             {
                 Alert(e.MessageHead, e.MessageBody);
             };
-            fetcher.RaiseRetreivedGroupItems += (sender, e) =>
+            _fetcher.RaiseRetreivedGroupItems += (sender, e) =>
             {
                 Refresh(e.Groups);
             };
-            fetcher.GetClasses();
+            InitializeComponent();
             DataContext = _groups;
+#if LEHRER
+            if (_settings.Read("lehrer") == null)
+            {
+                ShowPopup(false);
+            }
+            else
+            {
+                _fetcher.GetClasses();
+            }
+#endif
+            _pi = new ProgressIndicator {IsVisible = true, IsIndeterminate = true, Text = "Vertretungen werden geladen"};
 #if !LEHRER
+            _fetcher.GetClasses();
             if (_settings.Read("group") == null)
             {
                 _settings.Write("group", 0);
@@ -61,30 +66,24 @@ namespace vplan
             }
         }
 #if LEHRER
-        private void showPopup(bool wrongPw)
+        private void ShowPopup(bool wrongPw)
         {
                 ContentPanel.Visibility = Visibility.Collapsed;
                 //LayoutRoot.Background=Application.Current.Resources.
                 PasswordBox pwBox = new PasswordBox();
 
                 TiltEffect.SetIsTiltEnabled(pwBox, true);
-                CustomMessageBox messageBox = new CustomMessageBox()
+                CustomMessageBox messageBox = new CustomMessageBox
                 {
                     Caption = "Bitte Passwort eingeben",
                     Content = pwBox,
                     LeftButtonContent = "ok",
                     IsRightButtonEnabled = false,
-                    IsFullScreen = false
+                    IsFullScreen = false,
+                    Message = wrongPw ? "Falsches Passwort!!" : VConfig.EnterPw
                 };
-                if (wrongPw)
-                {
-                    messageBox.Message = "Falsches Passwort!!";
-                }
-                else{
-                    messageBox.Message = UntisExp.VConfig.enterPW;
-                }
 
-                
+
 
                 //Create a new custom message box
                 
@@ -95,17 +94,20 @@ namespace vplan
                     switch (e1.Result)
                     {
                         case CustomMessageBoxResult.LeftButton:
-                            if (pwBox.Password == UntisExp.VConfig.password)
+                            if (pwBox.Password == VConfig.Password)
                             {
-                                _settings.Write("group", 0);
+                                _settings.Write("lehrer", 1);
+                                _fetcher.GetClasses();
                                 ContentPanel.Visibility = Visibility.Visible;
+
                             }
-                            else { showPopup(true); return; }
+                            else
+                            {
+                                ShowPopup(true);
+                            }
                             break;
                         case CustomMessageBoxResult.None:
                             Application.Current.Terminate();
-                            break;
-                        default:
                             break;
                     }
                 };
@@ -136,7 +138,7 @@ namespace vplan
                 _settings.Write("group", ClassSelect.SelectedIndex);
             }
         }
-        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        protected override void OnBackKeyPress(CancelEventArgs e)
         {
             Uri uri = new Uri("/MainPage.xaml", UriKind.Relative);
             ((PhoneApplicationFrame) Application.Current.RootVisual).Navigate(uri);

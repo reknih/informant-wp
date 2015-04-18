@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using System.Windows.Media;
 using UntisExp;
 using UntisExp.Containers;
-
 
 namespace vplan
 {
@@ -29,14 +29,14 @@ namespace vplan
         public MainPage()
         {
             InitializeComponent();
-            String titel ="CWS Informant";
+            String title ="CWS Informant";
 #if LEHRER
-            titel+=" Lehrer";
+            title += " Lehrer";
 #endif
 #if DEBUG
-            titel += " BETA";
+            title += " BETA";
 #endif
-            Pano.Title = titel;
+            Pano.Title = title;
             _pi = new ProgressIndicator
             {
                 IsVisible = true,
@@ -49,7 +49,7 @@ namespace vplan
             _fetcher = new Fetcher();
             _fetcher.RaiseErrorMessage += (sender, e) =>
             {
-                Alert(e.MessageHead, e.MessageBody, e.MessageButton);
+                Alert(e.MessageHead, e.MessageBody);
             };
             _fetcher.RaiseRetreivedScheduleItems += (sender, e) =>
             {
@@ -79,7 +79,8 @@ namespace vplan
             SetPanoItems();
 
         }
-        public void Alert(string t, string msg, string btn)
+
+        private void Alert(string t, string msg)
         {
             Dispatcher.BeginInvoke(() =>
             {
@@ -113,7 +114,7 @@ namespace vplan
             if (_settings.Read("group") == null)
             {
                 
-                MessageBox.Show(UntisExp.VConfig.WelcomeText);
+                MessageBox.Show(VConfig.WelcomeText);
 
                 Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);
                 ((PhoneApplicationFrame)Application.Current.RootVisual).Navigate(uri);
@@ -127,7 +128,8 @@ namespace vplan
             SystemTray.SetProgressIndicator(this, _pi);
 
         }
-        public void Refresh(List<Data> v1)
+
+        private void Refresh(List<Data> v1)
         {
             
 
@@ -136,8 +138,7 @@ namespace vplan
                 SplitUpList(v1);
                 if (v1.Count == 0)
                 {
-                    var oc = new ObservableCollection<Data>();
-                    oc.Add(new Data());
+                    var oc = new ObservableCollection<Data> {new Data()};
                     Agenda1Panel.DataContext = oc;
                 }
                 try
@@ -152,7 +153,7 @@ namespace vplan
                 ReachToPress();
             });
         }
-        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        protected override void OnBackKeyPress(CancelEventArgs e)
         {
             if (NavigationService.CanGoBack)
             {

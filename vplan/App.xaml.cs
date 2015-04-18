@@ -6,9 +6,9 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Scheduler;
 using Microsoft.Phone.Shell;
+using UntisExp;
 using vplan.Resources;
 using vplan.ViewModels;
-using UntisExp;
 
 namespace vplan
 {
@@ -58,7 +58,7 @@ namespace vplan
             {
                 // Zähler für die aktuelle Bildrate anzeigen.
 #if DEBUG
-                Application.Current.Host.Settings.EnableFrameRateCounter = true;
+                Current.Host.Settings.EnableFrameRateCounter = true;
 #endif
 
                 // Bereiche der Anwendung hervorheben, die mit jedem Bild neu gezeichnet werden.

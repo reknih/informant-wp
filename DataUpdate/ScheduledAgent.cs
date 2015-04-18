@@ -1,22 +1,24 @@
-﻿using System.Diagnostics;
-using System.Windows;
-using System;
-using Microsoft.Phone.Scheduler;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.IsolatedStorage;
+using System.Windows;
+using Microsoft.Phone.Scheduler;
 using Microsoft.Phone.Shell;
 using UntisExp;
 using UntisExp.Containers;
 
 namespace DataUpdate
 {
+    // ReSharper disable once UnusedMember.Global
     public class ScheduledAgent : ScheduledTaskAgent
     {
         private readonly IsolatedStorageSettings _settingsFile = IsolatedStorageSettings.ApplicationSettings;
         private Fetcher _fetcher;
         private string _dayStr = " ";
-        private string Kachel1;
-        private ScheduledTask curTask;
+        // ReSharper disable once NotAccessedField.Local
+        private string _kachel1;
+        private ScheduledTask _curTask;
         protected string Kachel2;
         protected string Kachel3;
         protected int Vert;
@@ -38,8 +40,9 @@ namespace DataUpdate
 
         public ScheduledAgent(string kachel1)
         {
-            Kachel1 = kachel1;
+            _kachel1 = kachel1;
         }
+        public ScheduledAgent() { }
 
         /// Code, der bei nicht behandelten Ausnahmen ausgeführt wird
         private static void UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
@@ -62,7 +65,7 @@ namespace DataUpdate
         /// </remarks>
         protected override void OnInvoke(ScheduledTask task)
         {
-            curTask = task;
+            _curTask = task;
             //TODO: Code zum Ausführen der Aufgabe im Hintergrund hinzufügen
             if (_settingsFile.Contains("mode") != true)
             {
@@ -103,10 +106,10 @@ namespace DataUpdate
                 }
                 else if (v1.Count == 1)
                 {
-                    toast.Content = "Es gibt" + _dayStr + v1.Count.ToString() + " Vertretung!";
+                    toast.Content = "Es gibt" + _dayStr + v1.Count + " Vertretung!";
                 }
                 if (v1.Count == 0) { }
-                toast.Content = "Es gibt" + _dayStr + v1.Count.ToString() + " Vertretungsstunden!";
+                toast.Content = "Es gibt" + _dayStr + v1.Count + " Vertretungsstunden!";
                 try
                 {
                     if ((bool)_settingsFile["notify"] && (int)_settingsFile["oldCount"] != v1.Count)
@@ -130,10 +133,10 @@ namespace DataUpdate
                         // ignored
                     }
                 }
-                IconicTileData tileData = new IconicTileData()
+                IconicTileData tileData = new IconicTileData
                 {
                     Title = "CWS Informant",
-                    Count = v1.Count,
+                    Count = v1.Count
                 };
                 foreach (var tile in ShellTile.ActiveTiles)
                 {
@@ -145,12 +148,12 @@ namespace DataUpdate
         private void Stop()
         {
 #if DEBUG
-            ScheduledActionService.LaunchForTest(curTask.Name, TimeSpan.FromSeconds(60));
+            ScheduledActionService.LaunchForTest(_curTask.Name, TimeSpan.FromSeconds(60));
 #endif
             NotifyComplete();
         }
 
-        private bool Write(string key, object data)
+        private void Write(string key, object data)
         {
             try
             {
@@ -158,14 +161,12 @@ namespace DataUpdate
                 {
                     _settingsFile[key] = data;
                     _settingsFile.Save();
-                    return true;
+                    return;
                 }
                 _settingsFile.Add(key, data);
                 _settingsFile.Save();
-                return true;
             }
             catch {
-                return false;
             }
         }
     }

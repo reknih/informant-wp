@@ -1,7 +1,6 @@
 ﻿using System.IO.IsolatedStorage;
 using UntisExp.Interfaces;
 
-
 namespace vplan
 {
     class Settings : ISettings
@@ -15,17 +14,14 @@ namespace vplan
                 {
                     _settingsFile[key] = data;
                     _settingsFile.Save();
-                    return;
                 }
                 else
                 {
                     _settingsFile.Add(key, data);
                     _settingsFile.Save();
-                    return;
                 }
             }
             catch {
-                return;
             }
         }
         public object Read(string key)
@@ -34,7 +30,7 @@ namespace vplan
             {
                 return _settingsFile[key];
             }
-            else { return null; }
+            return null;
         }
     }
 }
