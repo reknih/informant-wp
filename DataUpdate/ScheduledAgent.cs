@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Windows;
+using System;
 using Microsoft.Phone.Scheduler;
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
@@ -15,6 +16,7 @@ namespace DataUpdate
         private Fetcher _fetcher;
         private string _dayStr = " ";
         private string Kachel1;
+        private ScheduledTask curTask;
         protected string Kachel2;
         protected string Kachel3;
         protected int Vert;
@@ -60,6 +62,7 @@ namespace DataUpdate
         /// </remarks>
         protected override void OnInvoke(ScheduledTask task)
         {
+            curTask = task;
             //TODO: Code zum Ausführen der Aufgabe im Hintergrund hinzufügen
             if (_settingsFile.Contains("mode") != true)
             {
@@ -142,7 +145,7 @@ namespace DataUpdate
         private void Stop()
         {
 #if DEBUG
-            ScheduledActionService.LaunchForTest(t.Name, TimeSpan.FromSeconds(60));
+            ScheduledActionService.LaunchForTest(curTask.Name, TimeSpan.FromSeconds(60));
 #endif
             NotifyComplete();
         }

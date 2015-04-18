@@ -37,7 +37,7 @@
          -->
 
          <!--Panoramasteuerelement-->
-        <phone:Panorama x:Name="Pano"  Title="CWS Informant" Foreground="White" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro">
+        <phone:Panorama x:Name="Pano"  Title="" Foreground="White" FontFamily="/Assets/SourceSansPro-Regular.ttf#Source Sans Pro">
             <phone:Panorama.TitleTemplate>
                 <DataTemplate>
                     <StackPanel>

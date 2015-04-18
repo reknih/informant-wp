@@ -29,6 +29,14 @@ namespace vplan
         public MainPage()
         {
             InitializeComponent();
+            String titel ="CWS Informant";
+#if LEHRER
+            titel+=" Lehrer";
+#endif
+#if DEBUG
+            titel += " BETA";
+#endif
+            Pano.Title = titel;
             _pi = new ProgressIndicator
             {
                 IsVisible = true,
@@ -104,9 +112,11 @@ namespace vplan
             }
             if (_settings.Read("group") == null)
             {
-                MessageBox.Show("Hallo und danke für den Download der App! Wir schicken dich jetzt zur Klassenauswahl, die App merkt sich danach diese Klasse. Wenn du einen Fehler findest schreib ihn uns doch bitte. Denn es ist alles noch ganz neu hier. Wir wünschen viel Ausfall!");
+                
+                MessageBox.Show(UntisExp.VConfig.WelcomeText);
+
                 Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);
-                ((PhoneApplicationFrame) Application.Current.RootVisual).Navigate(uri);
+                ((PhoneApplicationFrame)Application.Current.RootVisual).Navigate(uri);
             }
             else
             {
