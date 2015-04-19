@@ -31,7 +31,7 @@ namespace vplan
             InitializeComponent();
             String title ="CWS Informant";
 #if LEHRER
-            title += " Lehrer";
+            title += "für Lehrer";
 #endif
 #if DEBUG
             title += " BETA";
@@ -111,9 +111,13 @@ namespace vplan
             {
                 _settings.Write("BGAgentDisabled", false);
             }
+#if LEHRER
+            if (_settings.Read("group") == null||_settings.Read("lehrer") == null)
+            {
+#else
             if (_settings.Read("group") == null)
             {
-                
+#endif                
                 MessageBox.Show(VConfig.WelcomeText);
 
                 Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);

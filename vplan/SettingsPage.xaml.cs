@@ -69,7 +69,6 @@ namespace vplan
         private void ShowPopup(bool wrongPw)
         {
                 ContentPanel.Visibility = Visibility.Collapsed;
-                //LayoutRoot.Background=Application.Current.Resources.
                 PasswordBox pwBox = new PasswordBox();
 
                 TiltEffect.SetIsTiltEnabled(pwBox, true);
@@ -97,6 +96,10 @@ namespace vplan
                             if (pwBox.Password == VConfig.Password)
                             {
                                 _settings.Write("lehrer", 1);
+                                if (_settings.Read("group") == null)
+                                {
+                                    _settings.Write("group", 0);
+                                }
                                 _fetcher = new Fetcher();
                                 _fetcher.RaiseErrorMessage += (sender, e) =>
                                 {
