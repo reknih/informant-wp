@@ -24,6 +24,7 @@ namespace vplan
         public SettingsPage()
         {
             _fetcher = new Fetcher();
+
             _fetcher.RaiseErrorMessage += (sender, e) =>
             {
                 Alert(e.MessageHead, e.MessageBody);
@@ -56,6 +57,10 @@ namespace vplan
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+#if LEHRER
+            yourClass.Text = "Ihr Kürzel:";
+            howTile.Text = "Wie wollen Sie Ihre Kachel?";
+#endif
             try
             {
                 NotSelect.SelectedIndex = (int)_settings.Read("mode");
@@ -186,5 +191,6 @@ namespace vplan
                 MessageBox.Show(msg, t, MessageBoxButton.OK);
             });
         }
+
     }
 }

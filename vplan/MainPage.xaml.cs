@@ -95,8 +95,11 @@ namespace vplan
         // Daten für die ViewModel-Elemente laden
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule);
 
+#if LEHRER
+            srText.Text = "Hier könnte Ihre Werbung stehen!";
+            srSign.Text = "Ihr SR.";
+#endif
             if (!App.ViewModel.IsDataLoaded)
             {
                 App.ViewModel.LoadData();

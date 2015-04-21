@@ -133,8 +133,8 @@
                 <!--Einzeilige Liste mit Textumbruch-->
                 <StackPanel>
                     <TextBlock FontSize="{StaticResource PhoneFontSizeMedium}">Hallo,</TextBlock>
-                    <TextBlock Margin="0, 22, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Diese App soll dir in der Schule helfen. Sie besser machen. Denn wir brauchen ja ein besseres Image. Angeblich. Deswegen bekommst du hier, vom Informanten, alles zuverlässig mitgeteilt. Und bald vielleicht auch pünktlich. Schreib uns, wenn wir sonst etwas verbessern können.</TextBlock>
-                    <TextBlock Margin="0, 10, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap">Dein SR.</TextBlock>
+                    <TextBlock x:Name="srText" Margin="0, 22, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap" Text="Diese App soll dir in der Schule helfen. Sie besser machen. Denn wir brauchen ja ein besseres Image. Angeblich. Deswegen bekommst du hier, vom Informanten, alles zuverlässig mitgeteilt. Und bald vielleicht auch pünktlich. Schreib uns, wenn wir sonst etwas verbessern können."/>
+                    <TextBlock x:Name="srSign" Margin="0, 10, 0,0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextWrapping="Wrap" Text="Dein SR."/>
                 </StackPanel>
             </phone:PanoramaItem>
 
