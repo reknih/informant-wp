@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -31,7 +31,7 @@ namespace vplan
             InitializeComponent();
             String title ="CWS Informant";
 #if LEHRER
-            title += "für Lehrer";
+            title += " für Lehrer";
 #endif
 #if DEBUG
             title += " BETA";
