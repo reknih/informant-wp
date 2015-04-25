@@ -20,15 +20,15 @@ namespace vplan
         private bool _loaded;
         private Settings _settings = new Settings();
         private readonly ProgressIndicator _pi;
-        private Fetcher _fetcher;
+
         public SettingsPage()
         {
-            _fetcher = new Fetcher();
-            _fetcher.RaiseErrorMessage += (sender, e) =>
+            var fetcher = new Fetcher();
+            fetcher.RaiseErrorMessage += (sender, e) =>
             {
                 Alert(e.MessageHead, e.MessageBody);
             };
-            _fetcher.RaiseRetreivedGroupItems += (sender, e) =>
+            fetcher.RaiseRetreivedGroupItems += (sender, e) =>
             {
                 Refresh(e.Groups);
             };
@@ -46,7 +46,7 @@ namespace vplan
 #endif
             _pi = new ProgressIndicator {IsVisible = true, IsIndeterminate = true, Text = "Vertretungen werden geladen"};
 #if !LEHRER
-            _fetcher.GetClasses();
+            fetcher.GetClasses();
             if (_settings.Read("group") == null)
             {
                 _settings.Write("group", 0);
