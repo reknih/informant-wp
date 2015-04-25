@@ -233,12 +233,32 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <Choose>
+      <When Condition="'$(Configuration)' == 'Release-Lehrer'Or'$(Configuration)' == 'Debug-Lehrer'">
+        <ItemGroup>
+          <Content Include="Assets\Tiles\IconicTileMediumLargeTeacher.png" >
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+          </Content>
+          <Content Include="Assets\Tiles\IconicTileSmallTeacher.png" >
+             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+          </Content>
+        </ItemGroup>
+      </When>
+      <Otherwise>
+        <ItemGroup>
+         <Content Include="Assets\Tiles\IconicTileMediumLarge.png">
+           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+         </Content>
+         <Content Include="Assets\Tiles\IconicTileSmall.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+         </Content>
+       </ItemGroup>
+      </Otherwise>
+    </Choose>
   <ItemGroup>
     <Content Include="Assets\LockImage.png" />
     <Content Include="Assets\settings.png" />
     <Content Include="Assets\sync.png" />
-    <Content Include="Assets\Tiles\IconicTileMediumLargeTeacher.png" />
-    <Content Include="Assets\Tiles\IconicTileSmallTeacher.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
@@ -248,12 +268,7 @@
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Tiles\IconicTileMediumLarge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\IconicTileSmall.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">

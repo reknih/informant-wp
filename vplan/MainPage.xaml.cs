@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -31,7 +31,7 @@ namespace vplan
             InitializeComponent();
             String title ="CWS Informant";
 #if LEHRER
-            title += " Lehrer";
+            title += " für Lehrer";
 #endif
 #if DEBUG
             title += " BETA";
@@ -95,8 +95,11 @@ namespace vplan
         // Daten für die ViewModel-Elemente laden
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //fetcher.getTimes((int)settings.read("group") + 1, Activity.ParseFirstSchedule);
 
+#if LEHRER
+            srText.Text = "Hier könnte Ihre Werbung stehen!";
+            srSign.Text = "Ihr SR.";
+#endif
             if (!App.ViewModel.IsDataLoaded)
             {
                 App.ViewModel.LoadData();
@@ -111,9 +114,13 @@ namespace vplan
             {
                 _settings.Write("BGAgentDisabled", false);
             }
+#if LEHRER
+            if (_settings.Read("group") == null||_settings.Read("lehrer") == null)
+            {
+#else
             if (_settings.Read("group") == null)
             {
-                
+#endif                
                 MessageBox.Show(VConfig.WelcomeText);
 
                 Uri uri = new Uri("/SettingsPage.xaml", UriKind.Relative);

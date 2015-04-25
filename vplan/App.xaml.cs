@@ -164,6 +164,13 @@ namespace vplan
         // Code, der bei nicht behandelten Ausnahmen ausgeführt wird
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
+#if LEHRER
+            if ((e.ExceptionObject.Message.ToString() == "NullReferenceException") || (e.ExceptionObject.Message.ToString() == "Object reference not set to an instance of an object."))
+            {
+                e.Handled = true;
+                return;
+            }
+#endif
             if (Debugger.IsAttached)
             {
                 // Eine nicht behandelte Ausnahme ist aufgetreten. Unterbrechen und Debugger öffnen
