@@ -150,7 +150,7 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="False" Mode="Minimized" ForegroundColor="White">
             <shell:ApplicationBarIconButton IconUri="Assets/sync.png" Click="refreshBtn_Click" x:Name="RefreshBtn" Text="Aktualisieren"></shell:ApplicationBarIconButton>
-            <shell:ApplicationBarIconButton IconUri="Assets/settings.png" Click="setGroup_Click" x:Name="SetGroup" Text="Klasse wählen"></shell:ApplicationBarIconButton>
+            <shell:ApplicationBarIconButton IconUri="Assets/settings.png" Click="setGroup_Click" x:Name="SetGroup" Text="Einstellungen"></shell:ApplicationBarIconButton>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

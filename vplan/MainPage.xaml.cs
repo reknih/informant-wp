@@ -86,8 +86,9 @@ namespace vplan
             {
                 if (t == VConfig.NoPageErrTtl)
                 {
-                    _pi.Text = "Nachrichten werden abgefragt";
-                    ReachToPress();
+                    _pi.IsVisible = false;
+                   // _pi.Text = "Nachrichten werden abgefragt";
+                    //ReachToPress();
                 }
                 MessageBox.Show(msg, t, MessageBoxButton.OK);
             });
@@ -99,6 +100,7 @@ namespace vplan
 #if LEHRER
             srText.Text = "Hier könnte Ihre Werbung stehen!";
             srSign.Text = "Ihr SR.";
+
 #endif
             if (!App.ViewModel.IsDataLoaded)
             {
@@ -138,10 +140,9 @@ namespace vplan
 
         private void Refresh(List<Data> v1)
         {
-            
 
             Dispatcher.BeginInvoke(() =>
-            {
+            { 
                 SplitUpList(v1);
                 if (v1.Count == 0)
                 {
@@ -288,13 +289,17 @@ namespace vplan
                     {
                         Agenda2.Header = elem.Line1;
                     }
+                    else if(day>=2)
+                    {
+                        v2.Add(elem);
+                    }
                     day++;
                 }
                 else if (day == 1)
                 {
                     v1.Add(elem);
                 }
-                else if (day == 2)
+                else if (day >= 2)
                 {
                     v2.Add(elem);
                 }

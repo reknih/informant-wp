@@ -41,7 +41,7 @@ namespace vplan
             }
             else
             {
-                _fetcher.GetClasses();
+                fetcher.GetClasses();
             }
 #endif
             _pi = new ProgressIndicator {IsVisible = true, IsIndeterminate = true, Text = "Vertretungen werden geladen"};
@@ -104,16 +104,16 @@ namespace vplan
                                 {
                                     _settings.Write("group", 0);
                                 }
-                                _fetcher = new Fetcher();
-                                _fetcher.RaiseErrorMessage += (sender, e) =>
+                                var fetcher = new Fetcher();
+                                fetcher.RaiseErrorMessage += (sender, e) =>
                                 {
                                     Alert(e.MessageHead, e.MessageBody);
                                 };
-                                _fetcher.RaiseRetreivedGroupItems += (sender, e) =>
+                               fetcher.RaiseRetreivedGroupItems += (sender, e) =>
                                 {
                                     Refresh(e.Groups);
                                 };
-                                _fetcher.GetClasses();
+                                fetcher.GetClasses();
                                 try
                                 {
                                     ContentPanel.Visibility = Visibility.Visible;
