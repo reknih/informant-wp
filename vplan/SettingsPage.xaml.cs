@@ -59,6 +59,7 @@ namespace vplan
 #if LEHRER
             yourClass.Text = "Ihr Kürzel:";
             howTile.Text = "Wie wollen Sie Ihre Kachel?";
+            title.Text = "Kürzel";
 #endif
             try
             {

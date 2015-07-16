@@ -26,7 +26,7 @@
         <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="CWS INFORMANT" FontFamily="/Assets/ChampagneLim.ttf#ChampagneLimousines" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="Klasse/Kurs"  FontFamily="/Assets/ChampagneLim-Bold.ttf#ChampagneLimousines" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="title" Text="Klasse/Kurs"  FontFamily="/Assets/ChampagneLim-Bold.ttf#ChampagneLimousines" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
